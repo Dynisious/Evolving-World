@@ -11,6 +11,9 @@ package EvolvingWorld.Terrain;
 public class TerrainTile {
     private int terrain = TerrainTileConsts.Dirt; //The type of terrain that this
     //TerrainTile is.
+    public int getTerrain() {
+        return terrain;
+    }
     private double fertility = -1; //How fertile the soils in this TerrainTile
     //are for growing plants.
     private double dampness = -1; //The dampness of the soils in this TerrainTile.

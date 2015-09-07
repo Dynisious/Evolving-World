@@ -19,6 +19,7 @@ public final class Application {
 
     public Application() {
         terrain = new TerrainMap();
+        terrain.generateTerrain((long) (Math.random() * Long.MAX_VALUE));
     }
 
     /**
@@ -43,7 +44,7 @@ public final class Application {
         Logger.instance().write("Initialising instance of the game...", 2, true);
         final Application app = new Application();
         Logger.instance().write("App has completed initialisation.", 1, true);
-        
+
         while (applicationAlive) {
             try {
                 Thread.currentThread().wait(3000);

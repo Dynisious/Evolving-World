@@ -27,6 +27,19 @@ public class TerrainMap {
 
     /**
      * <p>
+     * Creates and returns a new instance of TerrainMap with all tiles
+     * initialised to dirt.</p>
+     */
+    public TerrainMap() {
+        for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
+            for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
+                terrain[x][y] = new TerrainTile(TerrainTileConsts.Dirt);
+            }
+        }
+    }
+
+    /**
+     * <p>
      * Generates terrain for the map.</p>
      *
      * @param seed The seed to use to create a pseudo random number generator
@@ -37,7 +50,7 @@ public class TerrainMap {
 
         //<editor-fold defaultstate="collapsed" desc="Forest Generation">
         for (int forest = 0; forest <= (int) Math.floor(
-                2 * rand.nextDouble()); forest++) {
+                4 * rand.nextDouble()); forest++) {
             final int x = (int) Math.floor(MapTileConsts.xWorldSize
                     * rand.nextDouble());
             final int y = (int) Math.floor(MapTileConsts.yWorldSize
@@ -54,7 +67,7 @@ public class TerrainMap {
                     if (xPos >= 0 || xPos < MapTileConsts.xWorldSize) {
                         final int yPos = y + o; //The position of the y value.
                         if (yPos >= 0 || yPos < MapTileConsts.yWorldSize) {
-                            if (rand.nextDouble() < 0.8) { //Chance to fill the
+                            if (rand.nextDouble() < 0.9) { //Chance to fill the
                                 //TerrainTile with Forest.
                                 setTile(xPos, yPos, TerrainTileConsts.Forest);
                             } else {
@@ -88,7 +101,9 @@ public class TerrainMap {
                         if (yPos >= 0 || yPos < MapTileConsts.yWorldSize) {
                             if (rand.nextDouble() < 0.8) { //Chance to fill the
                                 //TerrainTile with Grass.
-                                setTile(xPos, yPos, TerrainTileConsts.Grass);
+                                if (terrain[x][y].getTerrain() != TerrainTileConsts.Forest) {
+                                    setTile(xPos, yPos, TerrainTileConsts.Grass);
+                                }
                             } else {
                                 setTile(xPos, yPos, TerrainTileConsts.Mountain);
                             }
@@ -99,6 +114,24 @@ public class TerrainMap {
             //</editor-fold>
         }
         //</editor-fold>
+
+        for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
+            System.out.print("|");
+            for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
+                String s;
+                if (terrain[x][y].getTerrain() == TerrainTileConsts.Dirt) {
+                    s = "D|";
+                } else if (terrain[x][y].getTerrain() == TerrainTileConsts.Grass) {
+                    s = "G|";
+                } else if (terrain[x][y].getTerrain() == TerrainTileConsts.Forest) {
+                    s = "F|";
+                } else {
+                    s = "M|";
+                }
+                System.out.print(s);
+            }
+            System.out.print("\r\n");
+        }
     }
 
 }
