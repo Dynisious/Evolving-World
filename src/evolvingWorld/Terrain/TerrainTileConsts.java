@@ -7,7 +7,8 @@ package EvolvingWorld.Terrain;
  * @author Dynisious 07/09/2015
  * @version 0.0.1
  */
-public interface TerrainTypes {
+public interface TerrainTileConsts {
+    //<editor-fold defaultstate="collapsed" desc="Terrain Types">
     public int Grass = 0;
     public int Stone = 1;
     public int Mountain = 2;
@@ -20,4 +21,5 @@ public interface TerrainTypes {
     public int Clay = 9;
     public int Mud = 10;
     public int Bog = 11;
+    //</editor-fold>
 }
