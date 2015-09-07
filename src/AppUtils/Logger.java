@@ -1,4 +1,4 @@
-package evolvingWorld;
+package AppUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,9 +12,19 @@ import java.io.IOException;
  * @version 0.0.1
  */
 public final class Logger {
-    private static Logger instance; //This is the one and only instance
-    //of the Logger.
-    public static String logFile; //The text file to write to.
+    private static final Logger instance = new Logger(); //This is the one and
+    //only instance of the Logger.
+    private static String logFile; //The text file to write to.
+    /**
+     * <p>
+     * Sets the file that the logger writes to.</p>
+     *
+     * @param logFile The String representing the address of the log file.
+     */
+    public void setLogFile(final String logFile) {
+        Logger.logFile = logFile;
+    }
+
     private static final String errorMessage = "ERROR: Logger has failed! Message not saved to log: ";
 
     /**
@@ -30,10 +40,7 @@ public final class Logger {
      *
      * @return The Logger.
      */
-    public static Logger Logger() {
-        if (instance == null) {
-            instance = new Logger();
-        }
+    public static Logger instance() {
         return instance;
     }
 
