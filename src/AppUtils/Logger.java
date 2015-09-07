@@ -63,6 +63,7 @@ public final class Logger {
         try {
             final FileWriter w = new FileWriter(logFile, true);
             w.write("LEVEL-" + importance + ": " + message + "\r\n");
+            w.close();
         } catch (IOException ex) {
             String str = errorMessage + message + "\r\n" + ex.getMessage();
             for (StackTraceElement s : ex.getStackTrace()) {

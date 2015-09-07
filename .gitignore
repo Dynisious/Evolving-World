@@ -14,5 +14,6 @@ hs_err_pid*
 nbProject
 build.xml
 manifest.mf
+*.log
 /build/
 /dist/
