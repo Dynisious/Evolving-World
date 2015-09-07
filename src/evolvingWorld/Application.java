@@ -1,5 +1,6 @@
 package evolvingWorld;
 
+import AppUtils.Logger;
 /**
  * <p>
  * This is the most outward class, code should only run in here to initialise
@@ -23,7 +24,9 @@ public final class Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        Logger.instance().write("App is starting initialisation.", 1, true);
+        //Initialisation code.
+        Logger.instance().write("App has completed initialisation.", 1, true);
         while (applicationAlive) {
             try {
                 Thread.currentThread().wait(3000);
