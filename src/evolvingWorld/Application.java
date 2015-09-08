@@ -1,7 +1,6 @@
 package EvolvingWorld;
 
 import AppUtils.Logger;
-import EvolvingWorld.Terrain.*;
 /**
  * <p>
  * This is the most outward class, code should only run in here to initialise
@@ -15,11 +14,13 @@ public final class Application {
     public static boolean applicationAlive = true; //This boolean is the big
     //red button, do not change this value unless you want the application to
     //die instantly.
-    private final TerrainMap terrain; //The terrain for this instance of the game.
 
+    /**
+     * <p>
+     * Creates and returns a new instance of the Application.</p>
+     */
     public Application() {
-        terrain = new TerrainMap();
-        terrain.generateTerrain((long) (Math.random() * Long.MAX_VALUE));
+
     }
 
     /**
