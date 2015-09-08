@@ -47,12 +47,14 @@ public final class Application {
 
         while (applicationAlive) {
             try {
-                Thread.currentThread().wait(3000);
+                synchronized (app) {
+                    app.wait(5000);
+                }
             } catch (InterruptedException ex) {
                 applicationAlive = false; //Get out.
             }
         } //Loop this until the application needs to get out now.
-        System.exit(1); //Get out now.
+        System.exit(0); //Get out now.
     }
 
 }

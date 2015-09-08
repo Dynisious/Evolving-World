@@ -9,8 +9,8 @@ package EvolvingWorld.Terrain;
  */
 public interface TerrainTileConsts {
     //<editor-fold defaultstate="collapsed" desc="Terrain Types">
-    public int Grass = 0;
-    public int Stone = 1;
+    public int Plains = 0;
+    public int RockyPlains = 1;
     public int Mountain = 2;
     public int Forest = 3;
     public int River = 4;
