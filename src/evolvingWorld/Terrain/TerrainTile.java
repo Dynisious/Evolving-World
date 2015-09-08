@@ -75,8 +75,8 @@ public class TerrainTile {
             fertility = 0.72;
             dampness = 0.18;
             //</editor-fold>
-        } else if (type == TerrainTileConsts.Grass) {
-            //<editor-fold defaultstate="collapsed" desc="Grass Quality">
+        } else if (type == TerrainTileConsts.Plains) {
+            //<editor-fold defaultstate="collapsed" desc="Plains Quality">
             fertility = 0.6;
             dampness = 0.1;
             //</editor-fold>
@@ -105,8 +105,8 @@ public class TerrainTile {
             fertility = 0.01;
             dampness = 1;
             //</editor-fold>
-        } else if (type == TerrainTileConsts.Stone) {
-            //<editor-fold defaultstate="collapsed" desc="Stone Quality">
+        } else if (type == TerrainTileConsts.RockyPlains) {
+            //<editor-fold defaultstate="collapsed" desc="RockyPlains Quality">
             fertility = 0.01;
             dampness = 0.02;
             //</editor-fold>
