@@ -1,5 +1,6 @@
-package EvolvingWorld;
+package EvolvingWorld.Events;
 
+import java.util.EventListener;
 /**
  * <p>
  * An event listener for Updateables. Adding this event listener to an
@@ -10,7 +11,7 @@ package EvolvingWorld;
  * @version 0.0.1
  * @param <T> The type of Updateable this UpdateListener listens to.
  */
-public interface UpdateListener<T extends Updateable> {
+public interface UpdateListener<T extends Updateable> extends EventListener {
 
     /**
      * <p>

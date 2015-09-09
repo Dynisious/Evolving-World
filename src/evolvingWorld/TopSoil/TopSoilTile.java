@@ -1,6 +1,6 @@
 package EvolvingWorld.TopSoil;
 
-import EvolvingWorld.Updateable;
+import EvolvingWorld.Events.Updateable;
 /**
  * <p>
  * Holds all the values associated with the topsoil on a tile of the game
@@ -14,7 +14,7 @@ public class TopSoilTile extends Updateable {
     public double getFertility() {
         return fertility;
     }
-    public void setFertitlity(final double val) {
+    public void setFertitlity(final double val) throws ArithmeticException {
         if (val < 0 || val > 1) {
             throw new ArithmeticException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
@@ -25,7 +25,7 @@ public class TopSoilTile extends Updateable {
     public double getWaterCont() {
         return waterCont;
     }
-    public void setWaterCont(final double val) {
+    public void setWaterCont(final double val) throws ArithmeticException {
         if (val < 0 || val > 1) {
             throw new ArithmeticException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
@@ -36,7 +36,7 @@ public class TopSoilTile extends Updateable {
     public double getPollution() {
         return pollution;
     }
-    public void setPollution(final double val) {
+    public void setPollution(final double val) throws ArithmeticException {
         if (val < 0 || val > 1) {
             throw new ArithmeticException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);

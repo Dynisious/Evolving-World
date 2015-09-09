@@ -16,8 +16,7 @@ public interface TopSoilConstants {
     public int Shore = 5;
     public int Ocean = 6;
     public int Dirt = 7;
-    public int Farmland = 8;
-    public int Clay = 9;
-    public int Mud = 10;
-    public int Bog = 11;
+    public int Clay = 8;
+    public int Mud = 9;
+    public int Bog = 10;
 }
