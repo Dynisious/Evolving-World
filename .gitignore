@@ -12,8 +12,5 @@
 hs_err_pid*
 
 *.log
-nbProject
-build.xml
-manifest.mf
 /build/
 /dist/
