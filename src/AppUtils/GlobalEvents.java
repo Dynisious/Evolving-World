@@ -67,25 +67,36 @@ public final class GlobalEvents extends EventObject {
 
     //<editor-fold defaultstate="collapsed" desc="Reasons to Close">
     public static final int Standard_Close_Operation = 0;
-    public static final int Big_Red_Button = 1;
+    public static final int Application_Restarting = 1;
     //</editor-fold>
     /**
      * <p>
      * Firing this event lets all GlobalEventListeners know that the application
-     * is closing and that they should finalise before calling exit.</p>
+     * is closing and that they should finalise before calling if specified
+     * exit.</p>
      *
-     * @param reason The reason that the application is closing.
+     * @param reason          The reason that the application is closing.
+     * @param exitApplication True if the exit should be called before this
+     *                        method exits.
      */
-    public synchronized void applicationClosing(final int reason) {
+    public synchronized void applicationClosing(final int reason,
+                                                final boolean exitApplication) {
         final GlobalEventListener[] ls = getGobalEventListeners();
         if (ls != null) {
             for (final GlobalEventListener l : ls) {
                 l.applicationClosing(reason);
             }
         }
-        Logger.instance().write("The application is closing. Reason=" + reason,
-                1, true);
-        System.exit(reason);
+        String message = "The application is closing. Reason=" + reason
+                + "\r\n  Stack Trace -- " + Thread.currentThread().getName();
+        for (final StackTraceElement s : Thread.currentThread().getStackTrace()) {
+            message += String.format("\r\n    %-10s",
+                    "Line:" + s.getLineNumber()) + "\t" + s.toString();
+        }
+        Logger.instance().write(message, 1, true);
+        if (exitApplication) {
+            System.exit(reason);
+        }
     }
 
 }

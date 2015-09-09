@@ -7,7 +7,7 @@ import java.awt.Image;
  * the game world.</p>
  *
  * @author Dynisious 08/09/2015
- * @versions 0.0.1
+ * @versions 0.0.2
  */
 public final class GraphicsModule {
     private Image[] iBuffer; //The array of Images that can be drawn on.

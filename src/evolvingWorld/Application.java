@@ -12,12 +12,9 @@ import java.util.Scanner;
  * an instance of the Game.</p>
  *
  * @author Dynisious 07/09/2015
- * @version 0.0.1
+ * @version 0.3.1
  */
 public final class Application {
-    public static boolean applicationAlive = true; //This boolean is the big
-    //red button, do not change this value unless you want the application to
-    //die instantly.
 
     /**
      * <p>
@@ -36,6 +33,7 @@ public final class Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Thread.currentThread().setName("E-W: Main Thread");
         Logger.setLogFile("Log.log"); //Default file to write the log to.
         /*<editor-fold defaultstate="collapsed" desc="Command Line Arguments">*/ {
             for (String s : args) {
@@ -46,10 +44,10 @@ public final class Application {
         } //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Clear Log File">
         try {
-            final FileWriter w = new FileWriter(
-                    Logger.getLogFile(), false);
-            w.write(""); //Clear the log file.
-            w.close();
+            try (FileWriter w = new FileWriter(
+                    Logger.getLogFile(), false)) {
+                w.write(""); //Clear the log file.
+            } //Clear the log file.
         } catch (IOException ex) {
             System.out.println("The Log file could not be cleared.");
         }
@@ -60,40 +58,50 @@ public final class Application {
         //<editor-fold defaultstate="collapsed" desc="Commandline Input">
         final Thread commandline = new Thread(() -> {
             final Scanner input = new Scanner(System.in);
-            while (applicationAlive) {
+            boolean loop = true;
+            do {
                 final String[] command = input.nextLine().split(" "); //Gets the
                 //seperated input the the command.
-                if (command[0].equalsIgnoreCase("stop")) { //Stop the application.
+                if (command[0].equalsIgnoreCase("stop")) {
+                    //<editor-fold defaultstate="collapsed" desc="Stop Command">
                     GlobalEvents.instance().applicationClosing(
-                            GlobalEvents.Standard_Close_Operation);
-                } else if (command[0].equalsIgnoreCase("help")) {
-                    System.out.println("Commands:\r\n"
-                            + " help :\tDisplays all commands."
-                            + " stop :\tStops the application.");
+                            GlobalEvents.Standard_Close_Operation, true);
+                    //</editor-fold>
+                } else if (command[0].equalsIgnoreCase("help")
+                        || command[0].equalsIgnoreCase("h")
+                        || command[0].equalsIgnoreCase("?")) {
+                    //<editor-fold defaultstate="collapsed" desc="Help Command">
+                    System.out.println("Console Commands:\r\n"
+                            + " help/h/? :\tDisplays all commands.\r\n"
+                            + " stop     :\tStops the application.\r\n"
+                            + " restart  :\tStops this instance of the application and starts a new instance.");
+                    //</editor-fold>
+                } else if (command[0].equalsIgnoreCase("restart")) {
+                    //<editor-fold defaultstate="collapsed" desc="Restart Command">
+                    loop = false;
+                    GlobalEvents.instance().applicationClosing(
+                            GlobalEvents.Application_Restarting, false);
+                    final Thread mainThread = new Thread(() -> {
+                        main(args);
+                    });
+                    mainThread.start();
+                    //</editor-fold>
                 } else {
+                    //<editor-fold defaultstate="collapsed" desc="Unrecognised Command">
                     System.out.println(
                             "Command not recognised, check spelling and try again.");
+                    //</editor-fold>
                 }
-            }
-        }, "Evolving-World: Command Line Input");
-        commandline.setDaemon(true);
+            } while (loop);
+        }, "E-W: Console");
+        commandline.setDaemon(false);
         commandline.start();
         //</editor-fold>
         Logger.instance().write("Initialising instance of the game...", 2, true);
         final Application app = new Application();
-        Logger.instance().write("App has completed initialisation.", 1, true);
-
-        while (applicationAlive) {
-            try {
-                synchronized (app) {
-                    app.wait(5000);
-                }
-            } catch (InterruptedException ex) {
-                applicationAlive = false; //Get out.
-            }
-        } //Loop this until the application needs to get out now.
-        Logger.instance().write("App is jumping out!", 1, true);
-        System.exit(GlobalEvents.Big_Red_Button); //Get out now.
+        Logger.instance().write(
+                "App has completed initialisation. Type \"help\" for console commands.",
+                1, true);
     }
 
 }

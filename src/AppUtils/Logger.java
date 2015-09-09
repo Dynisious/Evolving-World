@@ -9,7 +9,7 @@ import java.io.IOException;
  * here.</p>
  *
  * @author Dynisious 07/09/2015
- * @version 0.0.1
+ * @version 0.2.1
  */
 public final class Logger {
     private static final Logger instance = new Logger(); //This is the one and
@@ -71,21 +71,25 @@ public final class Logger {
      * @param outputToUser If this value is true the message is written to the
      *                     console as well as the log file.
      */
+    private static final String headerFormat = "%-26s"; //The format for the
+    //header to a written message.
     public void write(final String message, final int importance,
                       final boolean outputToUser) {
-        try {
-            final FileWriter w = new FileWriter(logFile, true);
-            w.write("LEVEL-" + importance + ": " + message + "\r\n");
-            w.close();
+        try (final FileWriter w = new FileWriter(logFile, true)) {
+            w.write(String.format(headerFormat, Thread.currentThread().getName()
+                    + ":LEVEL-" + importance + ": ") + message + "\r\n");
         } catch (IOException ex) {
             String str = errorMessage + message + "\r\n" + ex.getMessage();
-            for (StackTraceElement s : ex.getStackTrace()) {
-                str += "\r\n" + s.toString();
+            for (final StackTraceElement s : ex.getStackTrace()) {
+                str += String.format("\r\n    %-10s",
+                        "Line:" + s.getLineNumber()) + "\t" + s.toString();
             }
             System.out.println(str);
         }
         if (outputToUser) {
-            System.out.println("LEVEL-" + importance + ": " + message);
+            System.out.println(String.format(headerFormat,
+                    Thread.currentThread().getName() + ":LEVEL-" + importance
+                    + ": ") + message);
         }
     }
 
