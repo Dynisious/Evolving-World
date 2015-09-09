@@ -21,8 +21,21 @@ public final class Logger {
      *
      * @param logFile The String representing the address of the log file.
      */
-    public void setLogFile(final String logFile) {
-        Logger.logFile = logFile;
+    public static void setLogFile(final String logFile) {
+        synchronized (logFile) {
+            Logger.logFile = logFile;
+        }
+    }
+    /**
+     * <p>
+     * Gets the file that the logger writes to.</p>
+     *
+     * @return The String representing the address of the log file.
+     */
+    public static String getLogFile() {
+        synchronized (logFile) {
+            return logFile;
+        }
     }
 
     private static final String errorMessage = "ERROR: Logger has failed! Message not saved to log: ";

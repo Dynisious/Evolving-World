@@ -11,7 +11,7 @@ import java.awt.Image;
  */
 public final class GraphicsModule {
     private Image[] iBuffer; //The array of Images that can be drawn on.
-    private int curFrame = 0; //The position of the current frame being
+    private int curFrame = -1; //The position of the current frame being
     //displayed in iBuffer.
     private int curDraw = -1; //The position of the next frame being drawn on
     //in iBuffer.
@@ -33,17 +33,19 @@ public final class GraphicsModule {
      *
      * @return The Image to be drawn on.
      */
-    public Image getNextDrawable() {
-        if (++curDraw == curFrame) { //Do not draw on the frame currently being
-            //displayed.
-            curFrame++;
-            if (curFrame >= iBuffer.length) { //Keep the index within the bounds.
-                curFrame = 0;
+    public synchronized Image getNextDrawable() {
+        synchronized (iBuffer) { //Lock access to IBuffer.
+            if (++curDraw == curFrame) { //Do not draw on the frame currently being
+                //displayed.
+                curFrame++;
+                if (curFrame >= iBuffer.length) { //Keep the index within the bounds.
+                    curFrame = 0;
+                }
+            } else if (curDraw >= iBuffer.length) { //Keep the index within the bounds.
+                curDraw = 0;
             }
-        } else if (curDraw >= iBuffer.length) { //Keep the index within the bounds.
-            curDraw = 0;
+            return iBuffer[curDraw];
         }
-        return iBuffer[curDraw];
     }
 
     /**
@@ -52,11 +54,16 @@ public final class GraphicsModule {
      *
      * @return The Image to be displayed.
      */
-    public Image getNextFrame() {
-        if (++curFrame >= iBuffer.length) { //Keep the index within the bounds.
-            curFrame = 0;
+    public synchronized Image getNextFrame() {
+        synchronized (iBuffer) { //Lock access to IBuffer.
+            if (++curFrame >= iBuffer.length) { //Keep the index within the bounds.
+                curFrame = 0;
+            }
+            if (curFrame == curDraw) { //Go to the next frame.
+                curFrame++;
+            }
+            return iBuffer[curFrame];
         }
-        return iBuffer[curFrame];
     }
 
 }
