@@ -8,7 +8,7 @@ import java.util.EventListener;
  * Updateable is updated.</p>
  *
  * @author Dynisious 08/09/2015
- * @version 0.0.1
+ * @version 0.1.1
  * @param <T> The type of Updateable this UpdateListener listens to.
  */
 public interface UpdateListener<T extends Updateable> extends EventListener {

@@ -61,4 +61,8 @@ public abstract class EventObject {
         }
         return null;
     }
+
+    protected EventObject() {
+    }
+
 }

@@ -10,7 +10,7 @@ package EvolvingWorld.Events;
  * listeners to the update.</p>
  *
  * @author Dynisious 08/09/2015
- * @version 0.0.1
+ * @version 0.1.1
  */
 public abstract class Updateable extends EventObject {
     /**
@@ -50,6 +50,9 @@ public abstract class Updateable extends EventObject {
      */
     public final UpdateListener[] getUpdateListeners() {
         return (UpdateListener[]) super.getListeners();
+    }
+
+    protected Updateable() {
     }
 
     /**
