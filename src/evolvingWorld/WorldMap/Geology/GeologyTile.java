@@ -1,7 +1,7 @@
 package EvolvingWorld.WorldMap.Geology;
 
 import EvolvingWorld.Events.Updateable;
-import EvolvingWorld.WorldMap.Tile;
+import EvolvingWorld.WorldMap.*;
 /**
  * <p>
  * GeologyTiles hold all the values associated with geological activity or

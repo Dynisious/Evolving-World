@@ -1,7 +1,7 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
 import EvolvingWorld.Events.Updateable;
-import EvolvingWorld.WorldMap.Tile;
+import EvolvingWorld.WorldMap.*;
 /**
  * <p>
  * Holds all the values associated with the topsoil on a tile of the game

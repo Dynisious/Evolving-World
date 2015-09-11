@@ -1,4 +1,4 @@
-package evolvingWorld.WorldMap.Atmosphere;
+package EvolvingWorld.WorldMap.Atmosphere;
 
 /**
  * <p>
