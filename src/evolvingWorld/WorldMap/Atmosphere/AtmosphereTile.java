@@ -1,7 +1,6 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
-import EvolvingWorld.Events.UpdateListener;
-import EvolvingWorld.Events.Updateable;
+import AppUtils.Events.UpdateListener;
 import EvolvingWorld.WorldMap.*;
 /**
  * <p>
@@ -10,8 +9,8 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 10/09/2015
  * @versions 0.0.1
  */
-public class AtmosphereTile extends Updateable
-        implements Tile, UpdateListener<AtmosphereTileMap> {
+public class AtmosphereTile
+        implements Tile, UpdateListener<AtmosphereUpdateEvent> {
     public double temperature; //The temperature of the air in this Tile.
     private double humidity; //The humidity of the air in this Tile.
     public final double getHumidity() {
@@ -126,7 +125,7 @@ public class AtmosphereTile extends Updateable
     }
 
     @Override
-    public void objectUpdated(AtmosphereTileMap u) {
+    public void objectUpdated(AtmosphereUpdateEvent u) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

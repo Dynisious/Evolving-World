@@ -1,6 +1,5 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
-import EvolvingWorld.Events.Updateable;
 import EvolvingWorld.WorldMap.*;
 /**
  * <p>
@@ -10,7 +9,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 08/09/2015
  * @versions 0.1.1
  */
-public class TopSoilTile extends Updateable implements Tile {
+public class TopSoilTile implements Tile {
     private double fertility; //The fertility of the soil in this tile.
     public final double getFertility() {
         return fertility;

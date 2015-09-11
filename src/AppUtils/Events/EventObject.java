@@ -1,4 +1,4 @@
-package EvolvingWorld.Events;
+package AppUtils.Events;
 
 import java.util.ArrayList;
 import java.util.EventListener;

@@ -1,5 +1,6 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
+import AppUtils.Events.UpdateListener;
 import EvolvingWorld.WorldMap.*;
 /**
  * <p>
@@ -8,7 +9,8 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class AtmosphereTileMap extends TileMap<AtmosphereTile> {
+public class AtmosphereTileMap extends TileMap<AtmosphereTile>
+        implements UpdateListener<WorldUpdateEvent> {
 
     /**
      * <p>
@@ -19,6 +21,16 @@ public class AtmosphereTileMap extends TileMap<AtmosphereTile> {
      */
     public AtmosphereTileMap(final AtmosphereTile[][] atmosphere) {
         super(atmosphere);
+    }
+
+    @Override
+    protected AtmosphereUpdateEvent getUpdateEvent() {
+        return new AtmosphereUpdateEvent(this);
+    }
+
+    @Override
+    public void objectUpdated(final WorldUpdateEvent u) {
+        fireUpdateEvent();
     }
 
 }

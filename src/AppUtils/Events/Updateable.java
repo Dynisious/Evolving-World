@@ -1,13 +1,17 @@
-package EvolvingWorld.Events;
+package AppUtils.Events;
 /**
  * <p>
- * All Objects which intend to use an update function and would like to alert an
- * abstract number of other Objects when they update should extend this class
+ * All Objects which intend to use an fireUpdateEvent function and would like to
+ * alert an
+ * abstract number of other Objects when they fireUpdateEvent should extend this
+ * class
  * and make use of UpdateListeners.
  *
- * The update function of a child class should override the update function of
- * this class and call <code>super.update()</code> when they wish to alert all
- * listeners to the update.</p>
+ * The fireUpdateEvent function of a child class should override the
+ * fireUpdateEvent function of
+ * this class and call <code>super.fireUpdateEvent()</code> when they wish to
+ * alert all
+ * listeners to the fireUpdateEvent.</p>
  *
  * @author Dynisious 08/09/2015
  * @version 0.1.1
@@ -57,11 +61,20 @@ public abstract class Updateable extends EventObject {
 
     /**
      * <p>
+     * Creates and returns a new UpdateEvent.</p>
+     *
+     * @return The new UpdateEvent.
+     */
+    protected abstract UpdateEvent getUpdateEvent();
+
+    /**
+     * <p>
      * Fires all UpdateListeners on this Object.</p>
      */
-    public void update() {
+    public void fireUpdateEvent() {
+        final UpdateEvent event = getUpdateEvent();
         for (final UpdateListener l : (UpdateListener[]) super.getListeners()) {
-            l.objectUpdated(this);
+            l.objectUpdated(event);
         }
     }
 

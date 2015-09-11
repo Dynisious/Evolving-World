@@ -1,6 +1,5 @@
 package EvolvingWorld.WorldMap.Geology;
 
-import EvolvingWorld.Events.Updateable;
 import EvolvingWorld.WorldMap.*;
 /**
  * <p>
@@ -10,7 +9,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 09/09/2015
  * @versions 0.0.1
  */
-public class GeologyTile extends Updateable implements Tile {
+public class GeologyTile implements Tile {
     final public double[] minerals; //The different ores which can be found and
     //mined in this GeologyTile.
     final public double[] gemstones; //The different gemstones which can be found and
