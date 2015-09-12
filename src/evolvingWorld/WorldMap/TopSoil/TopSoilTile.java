@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
-import EvolvingWorld.WorldMap.*;
+import EvolvingWorld.WorldMap.Tile;
 /**
  * <p>
  * Holds all the values associated with the topsoil on a tile of the game
@@ -9,7 +9,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 08/09/2015
  * @versions 0.1.1
  */
-public class TopSoilTile implements Tile {
+public class TopSoilTile implements Tile<TopSoilUpdateEvent> {
     private double fertility; //The fertility of the soil in this tile.
     public final double getFertility() {
         return fertility;
@@ -83,6 +83,10 @@ public class TopSoilTile implements Tile {
         setFertitlity(fertility);
         setWaterCont(waterCont);
         setPollution(pollution);
+    }
+    @Override
+    public void objectUpdated(TopSoilUpdateEvent u) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

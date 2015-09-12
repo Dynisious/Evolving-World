@@ -1,7 +1,8 @@
 package EvolvingWorld.WorldMap.Geology;
 
 import AppUtils.Events.UpdateListener;
-import EvolvingWorld.WorldMap.*;
+import EvolvingWorld.WorldMap.TileMap;
+import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -9,7 +10,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class GeologyTileMap extends TileMap<GeologyTile>
+public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent>
         implements UpdateListener<WorldUpdateEvent> {
 
     /**

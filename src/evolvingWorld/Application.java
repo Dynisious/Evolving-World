@@ -1,6 +1,8 @@
 package EvolvingWorld;
 
-import AppUtils.*;
+import AppUtils.GlobalEvents;
+import AppUtils.Logger;
+import EvolvingWorld.WorldMap.MapTileConsts;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTile;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
 import EvolvingWorld.WorldMap.Geology.GeologyTile;
@@ -130,25 +132,27 @@ public final class Application {
                     4, true);
             final AtmosphereTileMap atmosphere;
             /*<editor-fold defaultstate="collapsed" desc="Atmosphere Layer">*/ {
-                atmosphere = new AtmosphereTileMap(new AtmosphereTile[0][0]);
+                atmosphere = new AtmosphereTileMap(
+                        new AtmosphereTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
             } //</editor-fold>
             Logger.instance().write("Initialising game world crust...", 4, true);
             final GeologyTileMap crust;
             /*<editor-fold defaultstate="collapsed" desc="Geology Layer">*/ {
-                crust = new GeologyTileMap(new GeologyTile[0][0]);
+                crust = new GeologyTileMap(
+                        new GeologyTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
             } //</editor-fold>
             Logger.instance().write("Initialising game world soils...", 4, true);
             final TopSoilTileMap topSoil;
             /*<editor-fold defaultstate="collapsed" desc="TopSoil Layer">*/ {
-                topSoil = new TopSoilTileMap(new TopSoilTile[0][0]);
+                topSoil = new TopSoilTileMap(
+                        new TopSoilTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
             } //</editor-fold>
             gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
         } //</editor-fold>
         final Application app = new Application(gameMap);
-        Logger.instance()
-                .write(
-                        "App has completed initialisation. Type \"help\" for console commands.",
-                        1, true);
+        Logger.instance().write(
+                "App has completed initialisation. Type \"help\" for console commands.",
+                1, true);
     }
 
 }

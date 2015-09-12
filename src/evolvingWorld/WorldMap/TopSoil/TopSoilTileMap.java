@@ -1,8 +1,8 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
-import EvolvingWorld.WorldMap.TopSoil.*;
 import AppUtils.Events.UpdateListener;
-import EvolvingWorld.WorldMap.*;
+import EvolvingWorld.WorldMap.TileMap;
+import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -10,7 +10,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class TopSoilTileMap extends TileMap<TopSoilTile>
+public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent>
         implements UpdateListener<WorldUpdateEvent> {
 
     /**

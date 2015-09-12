@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.Geology;
 
-import EvolvingWorld.WorldMap.*;
+import EvolvingWorld.WorldMap.Tile;
 /**
  * <p>
  * GeologyTiles hold all the values associated with geological activity or
@@ -9,7 +9,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 09/09/2015
  * @versions 0.0.1
  */
-public class GeologyTile implements Tile {
+public class GeologyTile implements Tile<GeologyUpdateEvent> {
     final public double[] minerals; //The different ores which can be found and
     //mined in this GeologyTile.
     final public double[] gemstones; //The different gemstones which can be found and
@@ -57,6 +57,10 @@ public class GeologyTile implements Tile {
         this.gemstones = gemstones;
         setWaterTable(waterTable);
         setIntegrity(integrity);
+    }
+    @Override
+    public void objectUpdated(GeologyUpdateEvent u) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

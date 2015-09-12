@@ -1,5 +1,6 @@
 package EvolvingWorld.WorldMap;
 
+import AppUtils.Events.UpdateEvent;
 import AppUtils.Events.Updateable;
 /**
  * <p>
@@ -7,10 +8,11 @@ import AppUtils.Events.Updateable;
  *
  * @author Dynisious 09/09/2015
  * @param <T> The type of Tile that this TileMap will hold.
+ * @param <E> The type of UpdateEvent that gets thrown by this TileMap.
  *
  * @versions 0.0.1
  */
-public abstract class TileMap<T extends Tile> extends Updateable {
+public abstract class TileMap<T extends Tile, E extends UpdateEvent> extends Updateable<E> {
     private T[][] tiles;
     public T[][] getTiles() {
         return tiles;
@@ -18,6 +20,11 @@ public abstract class TileMap<T extends Tile> extends Updateable {
 
     protected TileMap(final T[][] tiles) {
         this.tiles = tiles;
+        for (final T[] ts : tiles) {
+            for (final T t : ts) {
+                addListener(t);
+            }
+        }
     }
 
 }

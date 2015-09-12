@@ -14,7 +14,7 @@ import java.util.TimerTask;
  * @author Dynisious 12/09/2015
  * @versions 0.0.1
  */
-public final class WorldMap extends Updateable {
+public final class WorldMap extends Updateable<WorldUpdateEvent> {
     public final AtmosphereTileMap atmosphere; //The atmosphere of the world.
     public final GeologyTileMap crust; //The world's crust.
     public final TopSoilTileMap topSoil; //The world's top soil.
@@ -33,8 +33,11 @@ public final class WorldMap extends Updateable {
                     final GeologyTileMap crust, final TopSoilTileMap topSoil,
                     final long tickPeriod) {
         this.atmosphere = atmosphere;
+        addListener(atmosphere);
         this.crust = crust;
+        addListener(crust);
         this.topSoil = topSoil;
+        addListener(topSoil);
         worldTick = new Timer("EW: World Tick", true);
         worldTick.scheduleAtFixedRate(new TimerTask() {
             @Override

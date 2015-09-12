@@ -8,10 +8,12 @@ import java.util.EventListener;
  * deals with the management of EventListeners.</p>
  *
  * @author Dynisious 09/09/2015
+ * @param <T> The Type of EventListener that listen on this EventObject.
+ *
  * @versions 0.0.1
  */
-public abstract class EventObject {
-    protected ArrayList<EventListener> listeners; //The EventListeners listening
+public abstract class EventObject<T extends EventListener> {
+    protected ArrayList<T> listeners; //The EventListeners listening
     //on this EventObject.
     /**
      * <p>
@@ -20,7 +22,7 @@ public abstract class EventObject {
      *
      * @param l The EventListener to add.
      */
-    public void addListener(final EventListener l) {
+    protected void addListener(final T l) {
         if (listeners == null) { //There is no ArrayList to add to.
             listeners = new ArrayList<>(1);
         }
@@ -32,7 +34,7 @@ public abstract class EventObject {
      *
      * @param index The index of the EventListener to remove.
      */
-    public void removeListener(final int index) {
+    protected void removeListener(final int index) {
         if (listeners != null) {
             listeners.remove(index);
         }
@@ -44,7 +46,7 @@ public abstract class EventObject {
      *
      * @param l The EventListener to remove.
      */
-    public void removeListener(final EventListener l) {
+    protected void removeListener(final T l) {
         if (listeners != null) { //A Listener has been added.
             listeners.remove(l);
         }
@@ -55,9 +57,9 @@ public abstract class EventObject {
      *
      * @return The array containing all EventListeners on this EventObject.
      */
-    public EventListener[] getListeners() {
+    public T[] getListeners() {
         if (listeners != null) {
-            return listeners.toArray(new EventListener[listeners.size()]);
+            return (T[]) listeners.toArray();
         }
         return null;
     }

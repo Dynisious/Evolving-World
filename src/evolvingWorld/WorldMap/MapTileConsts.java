@@ -1,4 +1,4 @@
-package EvolvingWorld;
+package EvolvingWorld.WorldMap;
 
 /**
  * <p>
@@ -8,8 +8,8 @@ package EvolvingWorld;
  * @version 0.0.1
  */
 public interface MapTileConsts {
-    public int xWorldSize = 10; //The width of the world grid.
-    public int yWorldSize = 10; //The height of the world grid.
+    public int xWorldSize = 50; //The width of the world grid.
+    public int yWorldSize = 50; //The height of the world grid.
     //<editor-fold defaultstate="collapsed" desc="Orientations">
     public byte North = 0;
     public byte North_East = 1;

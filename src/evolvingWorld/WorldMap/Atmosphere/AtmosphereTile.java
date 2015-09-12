@@ -1,7 +1,6 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
-import AppUtils.Events.UpdateListener;
-import EvolvingWorld.WorldMap.*;
+import EvolvingWorld.WorldMap.Tile;
 /**
  * <p>
  * Stores all data concerning the atmosphere in a Tile.</p>
@@ -9,8 +8,7 @@ import EvolvingWorld.WorldMap.*;
  * @author Dynisious 10/09/2015
  * @versions 0.0.1
  */
-public class AtmosphereTile
-        implements Tile, UpdateListener<AtmosphereUpdateEvent> {
+public class AtmosphereTile implements Tile<AtmosphereUpdateEvent> {
     public double temperature; //The temperature of the air in this Tile.
     private double humidity; //The humidity of the air in this Tile.
     public final double getHumidity() {
