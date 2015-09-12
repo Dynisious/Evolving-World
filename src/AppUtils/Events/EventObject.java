@@ -14,7 +14,7 @@ import java.util.EventListener;
  * @versions 0.0.1
  */
 public abstract class EventObject<T extends EventListener> {
-    protected ArrayList<T> listeners; //The EventListeners listening
+    public ArrayList<T> listeners; //The EventListeners listening
     //on this EventObject.
     /**
      * <p>
@@ -23,7 +23,7 @@ public abstract class EventObject<T extends EventListener> {
      *
      * @param l The EventListener to add.
      */
-    protected void addListener(final T l) throws NullPointerException {
+    public void addListener(final T l) throws NullPointerException {
         if (l == null) {
             throw new NullPointerException(
                     "ERROR : The passed listener was a null value.");
@@ -39,7 +39,7 @@ public abstract class EventObject<T extends EventListener> {
      *
      * @param index The index of the EventListener to remove.
      */
-    protected void removeListener(final int index) {
+    public void removeListener(final int index) {
         if (listeners != null) {
             listeners.remove(index);
         }
@@ -51,7 +51,7 @@ public abstract class EventObject<T extends EventListener> {
      *
      * @param l The EventListener to remove.
      */
-    protected void removeListener(final T l) {
+    public void removeListener(final T l) {
         if (listeners != null) { //A Listener has been added.
             listeners.remove(l);
         }

@@ -20,7 +20,55 @@ public final class WorldMap extends Updateable<WorldUpdateEvent> {
     public final AtmosphereTileMap atmosphere; //The atmosphere of the world.
     public final GeologyTileMap crust; //The world's crust.
     public final TopSoilTileMap topSoil; //The world's top soil.
-    private final Timer worldTick; //The Timer object for the game.
+    private Timer worldTick; //The Timer object for the game.
+    private final long tickPeriod;
+    public void startTick() {
+        if (worldTick == null) {
+            worldTick = new Timer("EW: World Tick", true);
+            worldTick.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        fireUpdateEvent();
+                    } catch (Exception ex) {
+                        String message = "ERROR : There was an error during game execution. "
+                                + ex.getClass().getName() + ": " + ex.getMessage();
+                        for (final StackTraceElement s : ex.getStackTrace()) {
+                            message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
+                        }
+                        Logger.instance().write(message, 1, true);
+                        GlobalEvents.instance().applicationClosing(
+                                GlobalEvents.Error_In_Execution, true);
+                    }
+                }
+            }, 0, tickPeriod);
+        }
+    }
+    public void stopTick() {
+        if (worldTick != null) {
+            synchronized (worldTick) {
+                worldTick.cancel();
+                worldTick = new Timer("EW: World Tick", true);
+                worldTick.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            fireUpdateEvent();
+                        } catch (Exception ex) {
+                            String message = "ERROR : There was an error during game execution. "
+                                    + ex.getClass().getName() + ": " + ex.getMessage();
+                            for (final StackTraceElement s : ex.getStackTrace()) {
+                                message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
+                            }
+                            Logger.instance().write(message, 1, true);
+                            GlobalEvents.instance().applicationClosing(
+                                    GlobalEvents.Error_In_Execution, true);
+                        }
+                    }
+                }, 0, tickPeriod);
+            }
+        }
+    }
 
     /**
      * <p>
@@ -40,24 +88,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent> {
         addListener(crust);
         this.topSoil = topSoil;
         addListener(topSoil);
-        worldTick = new Timer("EW: World Tick", true);
-        worldTick.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    fireUpdateEvent();
-                } catch (Exception ex) {
-                    String message = "ERROR : There was an error during game execution. "
-                            + ex.getClass().getName() + ": " + ex.getMessage();
-                    for (final StackTraceElement s : ex.getStackTrace()) {
-                        message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
-                    }
-                    Logger.instance().write(message, 1, true);
-                    GlobalEvents.instance().applicationClosing(
-                            GlobalEvents.Error_In_Execution, true);
-                }
-            }
-        }, 0, tickPeriod);
+        this.tickPeriod = tickPeriod;
     }
 
     @Override
