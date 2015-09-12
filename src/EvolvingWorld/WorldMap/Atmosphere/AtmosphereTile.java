@@ -14,9 +14,10 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public final double getHumidity() {
         return humidity;
     }
-    public final void setHumidity(final double val) throws ArithmeticException {
+    public final void setHumidity(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be between 0 and 1. val="
                     + String.format("%-10.2f", val));
         }
@@ -26,9 +27,10 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public final double getPressure() {
         return pressure;
     }
-    public final void setPressure(final double val) throws ArithmeticException {
+    public final void setPressure(final double val) throws
+            IllegalArgumentException {
         if (val < 0) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be greater than or equal to 0. val="
                     + String.format("%-10.2f", val));
         }
@@ -38,9 +40,10 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public final double getToxicity() {
         return toxicity;
     }
-    public final void setToxicity(final double val) throws ArithmeticException {
+    public final void setToxicity(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be between 0 and 1. val="
                     + String.format("%-10.2f", val));
         }
@@ -50,9 +53,9 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public final double getWind() {
         return wind;
     }
-    public final void setWind(final double val) throws ArithmeticException {
+    public final void setWind(final double val) throws IllegalArgumentException {
         if (val < 0) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be greater than or equal to 0. val="
                     + String.format("%-10.2f", val));
         }
@@ -62,9 +65,10 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public final double getCharge() {
         return charge;
     }
-    public final void setCharge(final double val) throws ArithmeticException {
+    public final void setCharge(final double val) throws
+            IllegalArgumentException {
         if (val < 0) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be greater than or equal to 0. val="
                     + String.format("%-10.2f", val));
         }

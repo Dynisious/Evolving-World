@@ -34,4 +34,9 @@ public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateE
         fireUpdateEvent();
     }
 
+    @Override
+    public void applicationClosing(int reason) {
+        clearListeners();
+    }
+
 }

@@ -14,9 +14,9 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getFertility() {
         return fertility;
     }
-    public final void setFertitlity(final double val) throws ArithmeticException {
+    public final void setFertitlity(final double val) throws IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
         }
         fertility = val;
@@ -25,9 +25,9 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getWaterCont() {
         return waterCont;
     }
-    public final void setWaterCont(final double val) throws ArithmeticException {
+    public final void setWaterCont(final double val) throws IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
         }
         waterCont = val;
@@ -36,9 +36,9 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getPollution() {
         return pollution;
     }
-    public final void setPollution(final double val) throws ArithmeticException {
+    public final void setPollution(final double val) throws IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
         }
         pollution = val;

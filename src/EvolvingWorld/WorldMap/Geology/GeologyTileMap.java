@@ -34,4 +34,9 @@ public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent>
         fireUpdateEvent();
     }
 
+    @Override
+    public void applicationClosing(int reason) {
+        clearListeners();
+    }
+
 }

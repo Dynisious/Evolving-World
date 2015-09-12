@@ -50,16 +50,18 @@ public final class GlobalEvents extends EventObject<GlobalEventListener> {
                 l.applicationClosing(reason);
             }
         }
-        String message = "The application is closing. Reason=" + reason
-                + "\r\n  Stack Trace -- " + Thread.currentThread().getName();
-        for (final StackTraceElement s : Thread.currentThread().getStackTrace()) {
-            message += String.format("\r\n    %-10s",
-                    "Line:" + s.getLineNumber()) + "\t" + s.toString();
-        }
-        Logger.instance().write(message, 1, true);
+        applicationClosing(reason);
+        Logger.instance().logWithStackTrace(
+                "The application is closing. Reason=" + reason
+                + "\r\n  Stack Trace -- " + Thread.currentThread().getName(),
+                1, true, Thread.currentThread().getStackTrace());
         if (exitApplication) {
             System.exit(reason);
         }
+    }
+    @Override
+    public void applicationClosing(int reason) {
+        clearListeners();
     }
 
 }

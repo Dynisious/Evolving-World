@@ -20,7 +20,7 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
     }
     public final void setWaterTable(final int val) {
         if (val < 0) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "ERROR : val must be greater than or equal to 0. val=" + val);
         }
         waterTable = val;
@@ -29,9 +29,9 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
     public final double getIntegrity() {
         return integrity;
     }
-    public final void setIntegrity(final double val) throws ArithmeticException {
+    public final void setIntegrity(final double val) throws IllegalArgumentException {
         if (val < 0 || val > 1) {
-            throw new ArithmeticException(
+            throw new IllegalArgumentException(
                     "Integrity can only be between 0 and 1. value="
                     + String.format("%-10.2f", val));
         }

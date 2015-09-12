@@ -13,9 +13,10 @@ import java.util.EventListener;
  *
  * @versions 0.0.1
  */
-public abstract class EventObject<T extends EventListener> {
-    public ArrayList<T> listeners; //The EventListeners listening
-    //on this EventObject.
+public abstract class EventObject<T extends EventListener>
+        implements GlobalEventListener {
+    private final ArrayList<T> listeners = new ArrayList<>(0); //The EventListeners
+    //listening for this EventObject.
     /**
      * <p>
      * Adds the passed EventListener to the list of EventListeners on this
@@ -24,14 +25,13 @@ public abstract class EventObject<T extends EventListener> {
      * @param l The EventListener to add.
      */
     public void addListener(final T l) throws NullPointerException {
-        if (l == null) {
-            throw new NullPointerException(
-                    "ERROR : The passed listener was a null value.");
+        synchronized (listeners) {
+            if (l == null) {
+                throw new NullPointerException(
+                        "ERROR : The passed listener was a null value.");
+            }
+            listeners.add(l);
         }
-        if (listeners == null) { //There is no ArrayList to add to.
-            listeners = new ArrayList<>(1);
-        }
-        listeners.add(l);
     }
     /**
      * <p>
@@ -40,7 +40,7 @@ public abstract class EventObject<T extends EventListener> {
      * @param index The index of the EventListener to remove.
      */
     public void removeListener(final int index) {
-        if (listeners != null) {
+        synchronized (listeners) {
             listeners.remove(index);
         }
     }
@@ -52,9 +52,7 @@ public abstract class EventObject<T extends EventListener> {
      * @param l The EventListener to remove.
      */
     public void removeListener(final T l) {
-        if (listeners != null) { //A Listener has been added.
-            listeners.remove(l);
-        }
+        listeners.remove(l);
     }
     /**
      * <p>
@@ -65,11 +63,24 @@ public abstract class EventObject<T extends EventListener> {
      * @return The array containing all EventListeners on this EventObject.
      */
     public T[] getListeners(final Class<? extends EventListener> cls) {
-        if (listeners != null) {
-            return (T[]) listeners.toArray((T[]) Array.newInstance(cls,
-                    listeners.size()));
-        }
-        return null;
+        return (T[]) listeners.toArray((T[]) Array.newInstance(cls,
+                listeners.size()));
+    }
+    /**
+     * <p>
+     * Returns true if there are no listeners on this EventObject.</p>
+     *
+     * @return true if there are no listeners on this EventObject.
+     */
+    public boolean noListeners() {
+        return listeners.isEmpty();
+    }
+    /**
+     * <p>
+     * Removes all EventListeners.</p>
+     */
+    protected void clearListeners() {
+        listeners.clear();
     }
 
     protected EventObject() {

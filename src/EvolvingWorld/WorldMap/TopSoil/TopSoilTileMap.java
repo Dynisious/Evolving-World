@@ -34,4 +34,9 @@ public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent>
         fireUpdateEvent();
     }
 
+    @Override
+    public void applicationClosing(int reason) {
+        clearListeners();
+    }
+
 }

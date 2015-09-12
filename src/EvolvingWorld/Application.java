@@ -12,8 +12,6 @@ import EvolvingWorld.WorldMap.TopSoil.TopSoilTile;
 import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
 import EvolvingWorld.WorldMap.WorldMap;
 import EvolvingWorld.Graphical.GameScreen;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 /**
  * <p>
@@ -69,16 +67,6 @@ public final class Application {
             }
             tickPeriod = tempTickPeriod;
         } //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Clear Log File">
-        try {
-            try (FileWriter w = new FileWriter(
-                    Logger.getLogFile(), false)) {
-                w.write(""); //Clear the log file.
-            } //Clear the log file.
-        } catch (IOException ex) {
-            System.out.println("ERROR : The Log file could not be cleared.");
-        }
-        //</editor-fold>
 
         Logger.instance().write("App is starting initialisation.", 1, true);
         Logger.instance().write("Initialising commandline input...", 2, true);
@@ -179,7 +167,7 @@ public final class Application {
             gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
         } //</editor-fold>
         final Application app = new Application(gameMap, display,
-                new GraphicsModule(1));
+                new GraphicsModule(1, display));
         Logger.instance().write(
                 "App has completed initialisation. Type \"help\" for console commands.",
                 1, true);

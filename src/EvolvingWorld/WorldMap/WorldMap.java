@@ -23,27 +23,12 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
     public final GeologyTileMap crust; //The world's crust.
     public final TopSoilTileMap topSoil; //The world's top soil.
     private Timer worldTick; //The Timer object for the game.
-    private final long tickPeriod;
+    private final long tickPeriod; //The number of milliseconds between each update tick.
+    private final TimerTask task; //The TimerTask executed each update tick.
     public void startTick() {
         if (worldTick == null) {
             worldTick = new Timer("EW: World Tick", true);
-            worldTick.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    try {
-                        fireUpdateEvent();
-                    } catch (Exception ex) {
-                        String message = "ERROR : There was an error during game execution. "
-                                + ex.getClass().getName() + ": " + ex.getMessage();
-                        for (final StackTraceElement s : ex.getStackTrace()) {
-                            message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
-                        }
-                        Logger.instance().write(message, 1, true);
-                        GlobalEvents.instance().applicationClosing(
-                                GlobalEvents.Error_In_Execution, true);
-                    }
-                }
-            }, 0, tickPeriod);
+            worldTick.scheduleAtFixedRate(task, 0, tickPeriod);
         }
     }
     public void stopTick() {
@@ -54,6 +39,8 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
             }
         }
     }
+    private int viewX; //The x coordinate of the top leftmost Tile in view.
+    private int viewY; //The y coordinate of the top leftmost Tile in view.
 
     /**
      * <p>
@@ -74,16 +61,32 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
         this.topSoil = topSoil;
         addListener(topSoil);
         this.tickPeriod = tickPeriod;
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    fireUpdateEvent();
+                } catch (Exception ex) {
+                    Logger.instance().logWithStackTrace(
+                            "ERROR : There was an error during game execution. "
+                            + ex.getClass().getName() + ": " + ex.getMessage(),
+                            1, true, ex.getStackTrace());
+                    GlobalEvents.instance().applicationClosing(
+                            GlobalEvents.Error_In_Execution, true);
+                }
+            }
+        };
     }
 
     @Override
     protected WorldUpdateEvent getUpdateEvent() {
-        return new WorldUpdateEvent(this);
+        return new WorldUpdateEvent(this, viewX, viewY);
     }
 
     @Override
     public void applicationClosing(int reason) {
         stopTick();
+        clearListeners();
         Logger.instance().write("Game Tick has been stopped successfully.",
                 4, false);
     }
