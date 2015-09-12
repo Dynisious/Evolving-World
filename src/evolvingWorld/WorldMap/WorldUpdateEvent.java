@@ -9,5 +9,16 @@ import AppUtils.Events.UpdateEvent;
  * @versions 0.0.1
  */
 public final class WorldUpdateEvent implements UpdateEvent {
+    public final WorldMap world; //The WorldMap which just updated.
+
+    /**
+     * <p>
+     * Creates and returns a new WorldUpdateEvent with the passed values.</p>
+     *
+     * @param world The WorldMap which just updated.
+     */
+    public WorldUpdateEvent(final WorldMap world) {
+        this.world = world;
+    }
 
 }

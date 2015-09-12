@@ -11,7 +11,7 @@ import java.util.EventListener;
  * @versions 0.0.1
  */
 public abstract class EventObject {
-    private ArrayList<EventListener> listeners; //The EventListeners listening
+    protected ArrayList<EventListener> listeners; //The EventListeners listening
     //on this EventObject.
     /**
      * <p>

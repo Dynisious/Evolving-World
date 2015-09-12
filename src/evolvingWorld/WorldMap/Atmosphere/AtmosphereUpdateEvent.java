@@ -9,10 +9,7 @@ import AppUtils.Events.UpdateEvent;
  * @versions 0.0.1
  */
 public final class AtmosphereUpdateEvent implements UpdateEvent {
-    private AtmosphereTileMap atmosphere; //The atmosphere which just updated.
-    public AtmosphereTileMap getAtmosphere() {
-        return atmosphere;
-    }
+    public final AtmosphereTileMap atmosphere; //The AtmosphereTileMap which just updated.
 
     /**
      * <p>
