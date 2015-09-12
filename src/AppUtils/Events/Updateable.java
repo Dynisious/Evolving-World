@@ -1,17 +1,12 @@
 package AppUtils.Events;
 /**
  * <p>
- * All Objects which intend to use an fireUpdateEvent function and would like to
- * alert an
- * abstract number of other Objects when they fireUpdateEvent should extend this
- * class
- * and make use of UpdateListeners.
+ * All Objects which intend to use an fire UpdateEvents function and would like
+ * to alert an abstract number of other Objects when they fire UpdateEvents
+ * should extend this class and make use of UpdateListeners.
  *
- * The fireUpdateEvent function of a child class should override the
- * fireUpdateEvent function of
- * this class and call <code>super.fireUpdateEvent()</code> when they wish to
- * alert all
- * listeners to the fireUpdateEvent.</p>
+ * A child class should call the <code>fireUpdateEvent</code> function when they
+ * wish to alert all listeners to the UpdateEvent.</p>
  *
  * @author Dynisious 08/09/2015
  * @version 0.1.1
@@ -72,9 +67,11 @@ public abstract class Updateable extends EventObject {
      * Fires all UpdateListeners on this Object.</p>
      */
     public void fireUpdateEvent() {
-        final UpdateEvent event = getUpdateEvent();
-        for (final UpdateListener l : (UpdateListener[]) super.getListeners()) {
-            l.objectUpdated(event);
+        if (listeners != null) {
+            final UpdateEvent event = getUpdateEvent();
+            for (final UpdateListener l : getUpdateListeners()) {
+                l.objectUpdated(event);
+            }
         }
     }
 
