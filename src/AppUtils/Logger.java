@@ -81,8 +81,7 @@ public final class Logger {
         } catch (IOException ex) {
             String str = errorMessage + message + "\r\n" + ex.getMessage();
             for (final StackTraceElement s : ex.getStackTrace()) {
-                str += String.format("\r\n    %-10s",
-                        "Line:" + s.getLineNumber()) + "\t" + s.toString();
+                str += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
             }
             System.out.println(str);
         }

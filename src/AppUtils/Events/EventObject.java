@@ -1,5 +1,6 @@
 package AppUtils.Events;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EventListener;
 /**
@@ -22,7 +23,11 @@ public abstract class EventObject<T extends EventListener> {
      *
      * @param l The EventListener to add.
      */
-    protected void addListener(final T l) {
+    protected void addListener(final T l) throws NullPointerException {
+        if (l == null) {
+            throw new NullPointerException(
+                    "ERROR : The passed listener was a null value.");
+        }
         if (listeners == null) { //There is no ArrayList to add to.
             listeners = new ArrayList<>(1);
         }
@@ -55,11 +60,14 @@ public abstract class EventObject<T extends EventListener> {
      * <p>
      * Returns an array of all EventListeners or null if there are none.</p>
      *
+     * @param cls The class type to return.
+     *
      * @return The array containing all EventListeners on this EventObject.
      */
-    public T[] getListeners() {
+    public T[] getListeners(final Class<? extends EventListener> cls) {
         if (listeners != null) {
-            return (T[]) listeners.toArray();
+            return (T[]) listeners.toArray((T[]) Array.newInstance(cls,
+                    listeners.size()));
         }
         return null;
     }

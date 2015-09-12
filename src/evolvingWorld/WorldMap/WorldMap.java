@@ -1,6 +1,8 @@
 package EvolvingWorld.WorldMap;
 
 import AppUtils.Events.Updateable;
+import AppUtils.GlobalEvents;
+import AppUtils.Logger;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
 import EvolvingWorld.WorldMap.Geology.GeologyTileMap;
 import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
@@ -42,7 +44,18 @@ public final class WorldMap extends Updateable<WorldUpdateEvent> {
         worldTick.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                fireUpdateEvent();
+                try {
+                    fireUpdateEvent();
+                } catch (Exception ex) {
+                    String message = "ERROR : There was an error during game execution. "
+                            + ex.getClass().getName() + ": " + ex.getMessage();
+                    for (final StackTraceElement s : ex.getStackTrace()) {
+                        message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
+                    }
+                    Logger.instance().write(message, 1, true);
+                    GlobalEvents.instance().applicationClosing(
+                            GlobalEvents.Error_In_Execution, true);
+                }
             }
         }, 0, tickPeriod);
     }

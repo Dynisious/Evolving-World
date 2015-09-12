@@ -10,47 +10,8 @@ import AppUtils.Events.GlobalEventListener;
  * @author Dynisious 09/09/2015
  * @versions 0.0.1
  */
-public final class GlobalEvents extends EventObject {
+public final class GlobalEvents extends EventObject<GlobalEventListener> {
     private static final GlobalEvents instance = new GlobalEvents();
-    /**
-     * <p>
-     * Adds the passed GlobalEventListener to the list of GlobalEventListeners
-     * on this
-     * EventObject.</p>
-     *
-     * @param gl The GlobalEventListener to add.
-     */
-    public void addGlobalEventListener(final GlobalEventListener gl) {
-        super.addListener(gl);
-    }
-    /**
-     * <p>
-     * Removes the GlobalEventListener kept at the passed index.</p>
-     *
-     * @param index The index of the GlobalEventListener to remove.
-     */
-    public void removeGlobalEventListener(final int index) {
-        super.removeListener(index);
-    }
-    /**
-     * <p>
-     * Removes the passed GlobalEventListener from the list of listeners on this
-     * EventObject.</p>
-     *
-     * @param gl The GlobalEventListener to remove.
-     */
-    public void removeGlobalEventListener(final GlobalEventListener gl) {
-        super.removeListener(gl);
-    }
-    /**
-     * <p>
-     * Returns an array of all EventListeners or null if there are none.</p>
-     *
-     * @return The array containing all EventListeners on this EventObject.
-     */
-    public GlobalEventListener[] getGobalEventListeners() {
-        return (GlobalEventListener[]) super.getListeners();
-    }
 
     private GlobalEvents() {
     }
@@ -68,6 +29,7 @@ public final class GlobalEvents extends EventObject {
     //<editor-fold defaultstate="collapsed" desc="Reasons to Close">
     public static final int Standard_Close_Operation = 0;
     public static final int Application_Restarting = 1;
+    public static final int Error_In_Execution = 2;
     //</editor-fold>
     /**
      * <p>
@@ -81,7 +43,8 @@ public final class GlobalEvents extends EventObject {
      */
     public synchronized void applicationClosing(final int reason,
                                                 final boolean exitApplication) {
-        final GlobalEventListener[] ls = getGobalEventListeners();
+        final GlobalEventListener[] ls = getListeners(
+                GlobalEventListener.class);
         if (ls != null) {
             for (final GlobalEventListener l : ls) {
                 l.applicationClosing(reason);

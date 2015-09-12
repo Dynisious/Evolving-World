@@ -132,20 +132,36 @@ public final class Application {
                     4, true);
             final AtmosphereTileMap atmosphere;
             /*<editor-fold defaultstate="collapsed" desc="Atmosphere Layer">*/ {
-                atmosphere = new AtmosphereTileMap(
-                        new AtmosphereTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
+                final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
+                for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
+                    for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
+                        tiles[x][y] = new AtmosphereTile(0);
+                    }
+                }
+                atmosphere = new AtmosphereTileMap(tiles);
             } //</editor-fold>
             Logger.instance().write("Initialising game world crust...", 4, true);
             final GeologyTileMap crust;
             /*<editor-fold defaultstate="collapsed" desc="Geology Layer">*/ {
-                crust = new GeologyTileMap(
-                        new GeologyTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
+                final GeologyTile[][] tiles = new GeologyTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
+                for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
+                    for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
+                        tiles[x][y] = new GeologyTile(new int[0], new int[0],
+                                0, 0);
+                    }
+                }
+                crust = new GeologyTileMap(tiles);
             } //</editor-fold>
             Logger.instance().write("Initialising game world soils...", 4, true);
             final TopSoilTileMap topSoil;
             /*<editor-fold defaultstate="collapsed" desc="TopSoil Layer">*/ {
-                topSoil = new TopSoilTileMap(
-                        new TopSoilTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize]);
+                final TopSoilTile[][] tiles = new TopSoilTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
+                for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
+                    for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
+                        tiles[x][y] = new TopSoilTile(0);
+                    }
+                }
+                topSoil = new TopSoilTileMap(tiles);
             } //</editor-fold>
             gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
         } //</editor-fold>

@@ -29,7 +29,7 @@ public abstract class Updateable<T extends UpdateEvent> extends EventObject<Upda
     public void fireUpdateEvent() {
         if (listeners != null) {
             final T event = getUpdateEvent();
-            for (final UpdateListener l : getListeners()) {
+            for (final UpdateListener l : getListeners(UpdateListener.class)) {
                 l.objectUpdated(event);
             }
         }

@@ -10,19 +10,18 @@ import EvolvingWorld.WorldMap.Tile;
  * @versions 0.0.1
  */
 public class GeologyTile implements Tile<GeologyUpdateEvent> {
-    final public double[] minerals; //The different ores which can be found and
+    final public int[] minerals; //The different ores which can be found and
     //mined in this GeologyTile.
-    final public double[] gemstones; //The different gemstones which can be found and
+    final public int[] gemstones; //The different gemstones which can be found and
     //mined in this GeologyTile.
-    private double waterTable; //The amount of water to be found in this tile.
-    public final double getWaterTable() {
+    private int waterTable; //The amount of water to be found in this tile.
+    public final int getWaterTable() {
         return waterTable;
     }
-    public final void setWaterTable(final double val) {
+    public final void setWaterTable(final int val) {
         if (val < 0) {
             throw new ArithmeticException(
-                    "ERROR : val must be greater than or equal to 0. val="
-                    + String.format("%-10.2f", val));
+                    "ERROR : val must be greater than or equal to 0. val=" + val);
         }
         waterTable = val;
     }
@@ -51,8 +50,8 @@ public class GeologyTile implements Tile<GeologyUpdateEvent> {
      * @param waterTable The amount of water to be found in the GeologyTile.
      * @param integrity  The integrity of this GeologyTile.
      */
-    public GeologyTile(final double[] minerals, final double[] gemstones,
-                       final double waterTable, final double integrity) {
+    public GeologyTile(final int[] minerals, final int[] gemstones,
+                       final int waterTable, final double integrity) {
         this.minerals = minerals;
         this.gemstones = gemstones;
         setWaterTable(waterTable);
