@@ -1,6 +1,6 @@
 package EvolvingWorld.Graphical;
 
-import AppUtils.Events.UpdateListener;
+import EvolvingWorld.AppUtils.Events.UpdateListener;
 import EvolvingWorld.WorldMap.WorldUpdateEvent;
 import java.awt.Image;
 /**
@@ -70,7 +70,7 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent> {
 
     @Override
     public void objectUpdated(WorldUpdateEvent u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 }

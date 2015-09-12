@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
-import AppUtils.Events.UpdateEvent;
+import EvolvingWorld.AppUtils.Events.UpdateEvent;
 /**
  * <p>
  * </p>

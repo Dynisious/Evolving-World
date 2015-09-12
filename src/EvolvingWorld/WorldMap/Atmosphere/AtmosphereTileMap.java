@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
-import AppUtils.Events.UpdateListener;
+import EvolvingWorld.AppUtils.Events.UpdateListener;
 import EvolvingWorld.WorldMap.TileMap;
 import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**

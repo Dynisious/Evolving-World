@@ -9,7 +9,7 @@ import EvolvingWorld.WorldMap.Tile;
  * @author Dynisious 08/09/2015
  * @versions 0.1.1
  */
-public class TopSoilTile implements Tile<TopSoilUpdateEvent> {
+public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     private double fertility; //The fertility of the soil in this tile.
     public final double getFertility() {
         return fertility;
@@ -62,9 +62,12 @@ public class TopSoilTile implements Tile<TopSoilUpdateEvent> {
      * <p>
      * Creates and returns a new TopSoilTile of the passed type.</p>
      *
+     * @param x
+     * @param y
      * @param soilType The type of soil in this TopSoilTile.
      */
-    public TopSoilTile(final int soilType) {
+    public TopSoilTile(final int x, final int y, final int soilType) {
+        super(x, y);
         setSoilType(soilType);
     }
 
@@ -72,13 +75,17 @@ public class TopSoilTile implements Tile<TopSoilUpdateEvent> {
      * <p>
      * Creates and returns a new TopSoilTile with the passed values.</p>
      *
+     * @param x
+     * @param y
      * @param fertility The fertility of the soil in this TopSoilTile.
      * @param soilType  The type of soil in this TopSoilTile.
      * @param waterCont The water content of the soil in this TopSoilTile.
      * @param pollution The pollution of the soil in this TopSoilTile.
      */
-    public TopSoilTile(final double fertility, final double waterCont,
+    public TopSoilTile(final int x, final int y, final double fertility,
+                       final double waterCont,
                        final double pollution, final int soilType) {
+        super(x, y);
         setSoilType(soilType);
         setFertitlity(fertility);
         setWaterCont(waterCont);
@@ -86,7 +93,7 @@ public class TopSoilTile implements Tile<TopSoilUpdateEvent> {
     }
     @Override
     public void objectUpdated(TopSoilUpdateEvent u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
 }

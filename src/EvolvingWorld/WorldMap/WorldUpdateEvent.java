@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap;
 
-import AppUtils.Events.UpdateEvent;
+import EvolvingWorld.AppUtils.Events.UpdateEvent;
 /**
  * <p>
  * Event is fired when the world map updates.</p>

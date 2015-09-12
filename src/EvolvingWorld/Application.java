@@ -1,7 +1,7 @@
 package EvolvingWorld;
 
-import AppUtils.GlobalEvents;
-import AppUtils.Logger;
+import EvolvingWorld.AppUtils.GlobalEvents;
+import EvolvingWorld.AppUtils.Logger;
 import EvolvingWorld.Graphical.GraphicsModule;
 import EvolvingWorld.WorldMap.MapTileConsts;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTile;
@@ -138,6 +138,8 @@ public final class Application {
         Logger.instance().write("Initialising instance of the game...", 2, true);
         Logger.instance().write("Initialising game map...", 3, true);
         final WorldMap gameMap;
+        final GameScreen display = new GameScreen();
+        GlobalEvents.instance().addListener(display);
         /*<editor-fold defaultstate="collapsed" desc="World Map">*/ {
             Logger.instance().write("Initialising game world atmosphere...",
                     4, true);
@@ -146,7 +148,7 @@ public final class Application {
                 final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
                 for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
                     for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
-                        tiles[x][y] = new AtmosphereTile(0);
+                        tiles[x][y] = new AtmosphereTile(x, y, 0);
                     }
                 }
                 atmosphere = new AtmosphereTileMap(tiles);
@@ -157,8 +159,8 @@ public final class Application {
                 final GeologyTile[][] tiles = new GeologyTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
                 for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
                     for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
-                        tiles[x][y] = new GeologyTile(new int[0], new int[0],
-                                0, 0);
+                        tiles[x][y] = new GeologyTile(x, y, new int[0],
+                                new int[0], 0, 0);
                     }
                 }
                 crust = new GeologyTileMap(tiles);
@@ -169,14 +171,14 @@ public final class Application {
                 final TopSoilTile[][] tiles = new TopSoilTile[MapTileConsts.xWorldSize][MapTileConsts.yWorldSize];
                 for (int x = 0; x < MapTileConsts.xWorldSize; x++) {
                     for (int y = 0; y < MapTileConsts.yWorldSize; y++) {
-                        tiles[x][y] = new TopSoilTile(0);
+                        tiles[x][y] = new TopSoilTile(x, y, 0);
                     }
                 }
                 topSoil = new TopSoilTileMap(tiles);
             } //</editor-fold>
             gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
         } //</editor-fold>
-        final Application app = new Application(gameMap, new GameScreen(),
+        final Application app = new Application(gameMap, display,
                 new GraphicsModule(1));
         Logger.instance().write(
                 "App has completed initialisation. Type \"help\" for console commands.",

@@ -1,8 +1,9 @@
 package EvolvingWorld.WorldMap;
 
-import AppUtils.Events.Updateable;
-import AppUtils.GlobalEvents;
-import AppUtils.Logger;
+import EvolvingWorld.AppUtils.Events.GlobalEventListener;
+import EvolvingWorld.AppUtils.Events.Updateable;
+import EvolvingWorld.AppUtils.GlobalEvents;
+import EvolvingWorld.AppUtils.Logger;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
 import EvolvingWorld.WorldMap.Geology.GeologyTileMap;
 import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
@@ -16,7 +17,8 @@ import java.util.TimerTask;
  * @author Dynisious 12/09/2015
  * @versions 0.0.1
  */
-public final class WorldMap extends Updateable<WorldUpdateEvent> {
+public final class WorldMap extends Updateable<WorldUpdateEvent>
+        implements GlobalEventListener {
     public final AtmosphereTileMap atmosphere; //The atmosphere of the world.
     public final GeologyTileMap crust; //The world's crust.
     public final TopSoilTileMap topSoil; //The world's top soil.
@@ -48,24 +50,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent> {
         if (worldTick != null) {
             synchronized (worldTick) {
                 worldTick.cancel();
-                worldTick = new Timer("EW: World Tick", true);
-                worldTick.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-                            fireUpdateEvent();
-                        } catch (Exception ex) {
-                            String message = "ERROR : There was an error during game execution. "
-                                    + ex.getClass().getName() + ": " + ex.getMessage();
-                            for (final StackTraceElement s : ex.getStackTrace()) {
-                                message += "\r\n    Line:" + s.getLineNumber() + "\t" + s.toString();
-                            }
-                            Logger.instance().write(message, 1, true);
-                            GlobalEvents.instance().applicationClosing(
-                                    GlobalEvents.Error_In_Execution, true);
-                        }
-                    }
-                }, 0, tickPeriod);
+                worldTick = null;
             }
         }
     }
@@ -94,6 +79,13 @@ public final class WorldMap extends Updateable<WorldUpdateEvent> {
     @Override
     protected WorldUpdateEvent getUpdateEvent() {
         return new WorldUpdateEvent(this);
+    }
+
+    @Override
+    public void applicationClosing(int reason) {
+        stopTick();
+        Logger.instance().write("Game Tick has been stopped successfully.",
+                4, false);
     }
 
 }

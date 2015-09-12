@@ -8,7 +8,7 @@ import EvolvingWorld.WorldMap.Tile;
  * @author Dynisious 10/09/2015
  * @versions 0.0.1
  */
-public class AtmosphereTile implements Tile<AtmosphereUpdateEvent> {
+public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     public double temperature; //The temperature of the air in this Tile.
     private double humidity; //The humidity of the air in this Tile.
     public final double getHumidity() {
@@ -90,6 +90,8 @@ public class AtmosphereTile implements Tile<AtmosphereUpdateEvent> {
      * Creates and returns a new instance of AtmosphereTile with the passed
      * values.</p>
      *
+     * @param x           The x coordinate of this Tile.
+     * @param y           The y coordinate of this Tile.
      * @param temperature The temperature in the Tile.
      * @param humidity    The humidity in the Tile.
      * @param pressure    The pressure in the Tile.
@@ -98,10 +100,12 @@ public class AtmosphereTile implements Tile<AtmosphereUpdateEvent> {
      * @param weather     The type of weather in the Tile.
      * @param charge      The electric charge in the atmosphere in the Tile.
      */
-    public AtmosphereTile(final double temperature, final double humidity,
+    public AtmosphereTile(final int x, final int y, final double temperature,
+                          final double humidity,
                           final double pressure, final double toxicity,
                           final double wind, final int weather,
                           final double charge) {
+        super(x, y);
         setWeather(weather);
         this.temperature = temperature;
         setHumidity(humidity);
@@ -116,15 +120,18 @@ public class AtmosphereTile implements Tile<AtmosphereUpdateEvent> {
      * Creates and returns a new instance of AtmosphereTile with the passed
      * weather.</p>
      *
+     * @param x       The x coordinate of the Tile.
+     * @param y       The y coordinate of the Tile.
      * @param weather The type of weather in the Tile.
      */
-    public AtmosphereTile(final int weather) {
+    public AtmosphereTile(final int x, final int y, final int weather) {
+        super(x, y);
         setWeather(weather);
     }
 
     @Override
     public void objectUpdated(AtmosphereUpdateEvent u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
 }

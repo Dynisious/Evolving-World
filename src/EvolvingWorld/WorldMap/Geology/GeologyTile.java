@@ -9,7 +9,7 @@ import EvolvingWorld.WorldMap.Tile;
  * @author Dynisious 09/09/2015
  * @versions 0.0.1
  */
-public class GeologyTile implements Tile<GeologyUpdateEvent> {
+public class GeologyTile extends Tile<GeologyUpdateEvent> {
     final public int[] minerals; //The different ores which can be found and
     //mined in this GeologyTile.
     final public int[] gemstones; //The different gemstones which can be found and
@@ -43,6 +43,8 @@ public class GeologyTile implements Tile<GeologyUpdateEvent> {
      * <p>
      * Creates and returns a new GeologyTile with the passed values.</p>
      *
+     * @param x          The x coordinate of this Tile.
+     * @param y          The y coordinate of this Tile.
      * @param minerals   The quantity of different minerals in this
      *                   GeologyTile.
      * @param gemstones  The quantity of different gemstones in this
@@ -50,8 +52,10 @@ public class GeologyTile implements Tile<GeologyUpdateEvent> {
      * @param waterTable The amount of water to be found in the GeologyTile.
      * @param integrity  The integrity of this GeologyTile.
      */
-    public GeologyTile(final int[] minerals, final int[] gemstones,
-                       final int waterTable, final double integrity) {
+    public GeologyTile(final int x, final int y, final int[] minerals,
+                       final int[] gemstones, final int waterTable,
+                       final double integrity) {
+        super(x, y);
         this.minerals = minerals;
         this.gemstones = gemstones;
         setWaterTable(waterTable);
@@ -59,7 +63,7 @@ public class GeologyTile implements Tile<GeologyUpdateEvent> {
     }
     @Override
     public void objectUpdated(GeologyUpdateEvent u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
 }

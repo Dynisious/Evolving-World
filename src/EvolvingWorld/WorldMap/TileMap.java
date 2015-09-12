@@ -1,7 +1,7 @@
 package EvolvingWorld.WorldMap;
 
-import AppUtils.Events.UpdateEvent;
-import AppUtils.Events.Updateable;
+import EvolvingWorld.AppUtils.Events.UpdateEvent;
+import EvolvingWorld.AppUtils.Events.Updateable;
 /**
  * <p>
  * Base class for the different maps of Tile types.</p>
