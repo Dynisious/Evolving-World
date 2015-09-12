@@ -1,6 +1,7 @@
 package EvolvingWorld.WorldMap.Atmosphere;
 
 import EvolvingWorld.AppUtils.Events.UpdateListener;
+import EvolvingWorld.AppUtils.Logger;
 import EvolvingWorld.WorldMap.TileMap;
 import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
@@ -31,6 +32,7 @@ public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateE
 
     @Override
     public void objectUpdated(final WorldUpdateEvent u) {
+        Logger.instance().write("Updating world atmosphere...", 10, false);
         fireUpdateEvent();
     }
 

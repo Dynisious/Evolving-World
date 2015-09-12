@@ -30,6 +30,7 @@ public final class GlobalEvents extends EventObject<GlobalEventListener> {
     public static final int Standard_Close_Operation = 0;
     public static final int Application_Restarting = 1;
     public static final int Error_In_Execution = 2;
+    public static final int Error_In_Screen_Buffer_Initialisation = 3;
     //</editor-fold>
     /**
      * <p>
@@ -41,8 +42,8 @@ public final class GlobalEvents extends EventObject<GlobalEventListener> {
      * @param exitApplication True if the exit should be called before this
      *                        method exits.
      */
-    public synchronized void applicationClosing(final int reason,
-                                                final boolean exitApplication) {
+    public synchronized void fireApplicationClosingEvent(final int reason,
+                                                         final boolean exitApplication) {
         final GlobalEventListener[] ls = getListeners(
                 GlobalEventListener.class);
         if (ls != null) {

@@ -2,12 +2,12 @@ package EvolvingWorld.Graphical;
 
 import EvolvingWorld.AppUtils.Events.GlobalEventListener;
 import EvolvingWorld.AppUtils.Logger;
+import java.awt.AWTException;
+import java.awt.BufferCapabilities;
 import java.awt.Color;
 import java.awt.DisplayMode;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
+import java.awt.ImageCapabilities;
 import javax.swing.JFrame;
 /**
  * <p>
@@ -16,15 +16,27 @@ import javax.swing.JFrame;
  * @author Dynisious 12/09/2015
  * @versions 0.0.1
  */
-public class GameScreen extends JFrame
-        implements GlobalEventListener, GraphicsListener {
+public class GameScreen extends JFrame implements GlobalEventListener {
 
-    public GameScreen() {
+    /**
+     * <p>
+     * Creates, displays and returns a new GameScreen object.</p>
+     *
+     * @param backBuffers The number of BackBuffers to be created for drawing
+     *                    graphics.
+     *
+     * @throws AWTException Thrown if there is an issue creating the double
+     *                      buffer strategy.
+     */
+    public GameScreen(final int backBuffers) throws AWTException {
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         adjustSize();
-        getContentPane().setBackground(Color.BLACK);
+        getContentPane().setBackground(Color.MAGENTA);
+        this.createBufferStrategy(backBuffers, new BufferCapabilities(
+                new ImageCapabilities(true), new ImageCapabilities(true),
+                BufferCapabilities.FlipContents.BACKGROUND));
         setVisible(true);
     }
 
@@ -42,6 +54,7 @@ public class GameScreen extends JFrame
     @Override
     public void applicationClosing(int reason) {
         setVisible(false);
+        getBufferStrategy().dispose();
         dispose();
     }
 
@@ -50,24 +63,6 @@ public class GameScreen extends JFrame
         Logger.instance().write("Game Screen has been closed successfully.",
                 3, false);
         super.dispose();
-    }
-
-    private long lastDrawn = -1; //The ID of the last frame that was drawn.
-
-    @Override
-    public synchronized void frameDrawn(final Image frame, final long frameId) {
-        if (frameId > lastDrawn && isDisplayable()) { //This is a more recent frame than the last
-            //frame that was drawn.
-            Graphics2D g = (Graphics2D) getGraphics();
-            paintAll(g);
-            g.drawImage(frame, 0, 0, this);
-            lastDrawn = frameId;
-        }
-    }
-
-    @Override
-    public synchronized void paintAll(Graphics g) {
-        super.paint(g); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

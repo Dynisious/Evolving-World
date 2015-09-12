@@ -29,6 +29,8 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
         if (worldTick == null) {
             worldTick = new Timer("EW: World Tick", true);
             worldTick.scheduleAtFixedRate(task, 0, tickPeriod);
+            Logger.instance().write("Game tick has been started successfully.",
+                    7, false);
         }
     }
     public void stopTick() {
@@ -36,6 +38,9 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
             synchronized (worldTick) {
                 worldTick.cancel();
                 worldTick = null;
+                Logger.instance().write(
+                        "Game tick has been stopped successfully.",
+                        7, false);
             }
         }
     }
@@ -71,7 +76,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
                             "ERROR : There was an error during game execution. "
                             + ex.getClass().getName() + ": " + ex.getMessage(),
                             1, true, ex.getStackTrace());
-                    GlobalEvents.instance().applicationClosing(
+                    GlobalEvents.instance().fireApplicationClosingEvent(
                             GlobalEvents.Error_In_Execution, true);
                 }
             }
@@ -84,10 +89,19 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
     }
 
     @Override
+    public WorldUpdateEvent fireUpdateEvent() {
+        Logger.instance().write("Game world is updating...", 10, false);
+        final WorldUpdateEvent event = super.fireUpdateEvent();
+        Logger.instance().write("Game world has updated", 10, false);
+        event.readyForDraw.release(); //This tick is ready to be rendered.
+        return event;
+    }
+
+    @Override
     public void applicationClosing(int reason) {
         stopTick();
         clearListeners();
-        Logger.instance().write("Game Tick has been stopped successfully.",
+        Logger.instance().write("Game world has been stopped successfully.",
                 4, false);
     }
 

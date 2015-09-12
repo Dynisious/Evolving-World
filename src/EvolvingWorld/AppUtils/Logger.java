@@ -35,6 +35,8 @@ public final class Logger {
             Logger.logFile = logFile;
         }
     }
+    public static boolean debugMode = false; //If true all writes to the log are
+    //outputed to the console.
 
     /**
      * <p>
@@ -53,8 +55,8 @@ public final class Logger {
         return instance;
     }
 
-    private static final String errorFormat = "\r\n    Line:%-14s"; //The format
-    //for a StackTraceElement of an error.
+    private static final String logWithStackTraceFormat = "\r\n    Line:%-14s";
+    //The format for a StackTraceElement of an error.
     /**
      * <p>
      * Formats and returns a String containing the message and the
@@ -67,7 +69,7 @@ public final class Logger {
      */
     private String formatError(String message, final StackTraceElement[] trace) {
         for (final StackTraceElement s : trace) {
-            message += String.format(errorFormat, s.getLineNumber()) + s.toString();
+            message += String.format(logWithStackTraceFormat, s.getLineNumber()) + s.toString();
         }
         return message;
     }
@@ -101,7 +103,7 @@ public final class Logger {
                 System.out.println(formatError(errorMessage + message,
                         ex.getStackTrace()));
             }
-            if (outputToConsole) {
+            if (outputToConsole || debugMode) {
                 System.out.print(message);
             }
         }

@@ -1,6 +1,7 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
 import EvolvingWorld.AppUtils.Events.UpdateListener;
+import EvolvingWorld.AppUtils.Logger;
 import EvolvingWorld.WorldMap.TileMap;
 import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
@@ -31,6 +32,7 @@ public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent>
 
     @Override
     public void objectUpdated(final WorldUpdateEvent u) {
+        Logger.instance().write("Updating world top soil...", 10, false);
         fireUpdateEvent();
     }
 
