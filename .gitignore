@@ -12,5 +12,6 @@
 hs_err_pid*
 
 *.log
+nbproject/private/private.xml
 /build/
 /dist/
