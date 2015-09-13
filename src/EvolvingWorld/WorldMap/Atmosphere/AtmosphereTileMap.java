@@ -11,7 +11,7 @@ import EvolvingWorld.WorldMap.WorldUpdateEvent;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateEvent>
+public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateEvent, WorldUpdateEvent>
         implements UpdateListener<WorldUpdateEvent> {
 
     /**
@@ -26,19 +26,27 @@ public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateE
     }
 
     @Override
-    protected AtmosphereUpdateEvent getUpdateEvent() {
-        return new AtmosphereUpdateEvent(this);
+    protected AtmosphereUpdateEvent getUpdateEvent()
+            throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+                "This is not a supported opperation for "
+                + getClass().getSimpleName());
     }
 
     @Override
     public void objectUpdated(final WorldUpdateEvent u) {
         Logger.instance().write("Updating world atmosphere...", 10, false);
-        fireUpdateEvent();
+        fireUpdateEvent(u);
     }
 
     @Override
     public void applicationClosing(int reason) {
         clearListeners();
+    }
+
+    @Override
+    protected AtmosphereUpdateEvent getUpdateEvent(final WorldUpdateEvent src) {
+        return new AtmosphereUpdateEvent(src);
     }
 
 }

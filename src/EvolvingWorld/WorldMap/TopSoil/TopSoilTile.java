@@ -1,5 +1,6 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
+import EvolvingWorld.WorldMap.Geology.GeologyTile;
 import EvolvingWorld.WorldMap.Tile;
 /**
  * <p>
@@ -22,17 +23,17 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
         }
         fertility = val;
     }
-    private double waterCont; //The water content of the soil in this tile.
-    public final double getWaterCont() {
-        return waterCont;
+    private double waterContent; //The water content of the soil in this tile.
+    public final double getWaterContent() {
+        return waterContent;
     }
-    public final void setWaterCont(final double val) throws
+    public final void setWaterContent(final double val) throws
             IllegalArgumentException {
         if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
         }
-        waterCont = val;
+        waterContent = val;
     }
     private double pollution; //How polluted the soils are in this tile.
     public final double getPollution() {
@@ -61,7 +62,7 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
         this.soilType = soilType;
         if (soilType == TopSoilConstants.Dirt) {
             fertility = 0.8;
-            waterCont = 0.3;
+            waterContent = 0.3;
             pollution = 0.02;
         }
     }
@@ -96,12 +97,25 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
         super(x, y);
         setSoilType(soilType);
         setFertitlity(fertility);
-        setWaterCont(waterCont);
+        setWaterContent(waterCont);
         setPollution(pollution);
     }
+
     @Override
     public void objectUpdated(TopSoilUpdateEvent u) {
-
+        final GeologyTile crust = u.world.crust.getTile(x, y); //The crust layer
+        final double groundWater; //The amount of water that is drawn up to the soil.
+        if (crust.getWaterTable() < 0.25) { //Drain water.
+            groundWater = -Double.min(waterContent, Double.min(
+                    1 - crust.getWaterTable(),
+                    TopSoilConstants.GroundWaterAbsorbtionRate));
+        } else { //Pull water.
+            groundWater = Double.min(1 - waterContent, Double.min(
+                    crust.getWaterTable(),
+                    TopSoilConstants.GroundWaterAbsorbtionRate));
+        }
+        setWaterContent(waterContent + groundWater);
+        crust.setWaterTable(crust.getWaterTable() - groundWater);
     }
 
 }

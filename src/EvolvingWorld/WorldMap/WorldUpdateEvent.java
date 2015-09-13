@@ -9,7 +9,7 @@ import java.util.concurrent.Semaphore;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public final class WorldUpdateEvent implements UpdateEvent {
+public class WorldUpdateEvent implements UpdateEvent {
     public final WorldMap world; //The WorldMap which just updated.
     public final int x; //The x coordinate of the top leftmost viewable position.
     public final int y; //The y coordinate of the top leftmost viewable position.

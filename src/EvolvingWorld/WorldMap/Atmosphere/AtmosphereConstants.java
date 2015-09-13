@@ -11,17 +11,28 @@ public interface AtmosphereConstants {
     //<editor-fold defaultstate="collapsed" desc="Weather Types">
     /**
      * <p>
-     * Fair weather, no winds, nice temperature, low humidity.</p>
+     * Fair weather, nice temperature, low humidity.</p>
      */
-    public int fair = 0;
-    public int overcast = 1;
-    public int clear = 2;
-    public int rainy = 3;
-    public int hail = 4;
-    public int snow = 5;
-    public int sunny = 6;
-    public int heat_wave = 7;
-    public int muggy = 8;
-    public int stormy = 9;
+    public int Fair = 0;
+    public int Overcast = 1;
+    public int Clear = 2;
+    /**
+     * <p>
+     * Rainy weather, dropping temperature, slowly dropping humidity.</p>
+     */
+    public int Rainy = 3;
+    /**
+     * <p>
+     * Rapidly dropping temperatures, medium drop in humidity.</p>
+     */
+    public int Hail = 4;
+    public int Snow = 5;
+    public int Sunny = 6;
+    public int Heat_Wave = 7;
+    public int Muggy = 8;
+    public int Stormy = 9;
     //</editor-fold>
+    public double FairHumidityChangeCoefficient = 0.002;
+    public double RainyHumidityChangeCoefficient = 0.002;
+    public double HailHumidityChangeCoefficient = 0.004;
 }

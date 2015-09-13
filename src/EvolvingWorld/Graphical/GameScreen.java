@@ -1,6 +1,7 @@
 package EvolvingWorld.Graphical;
 
 import EvolvingWorld.AppUtils.Events.GlobalEventListener;
+import EvolvingWorld.AppUtils.GlobalEvents;
 import EvolvingWorld.AppUtils.Logger;
 import java.awt.AWTException;
 import java.awt.BufferCapabilities;
@@ -10,6 +11,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.ImageCapabilities;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 /**
  * <p>
@@ -33,7 +36,7 @@ public class GameScreen extends JFrame implements GlobalEventListener {
     public GameScreen(final int backBuffers) throws AWTException {
         setResizable(false);
         setUndecorated(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         adjustSize();
         getContentPane().setBackground(Color.BLACK);
         this.createBufferStrategy(backBuffers, new BufferCapabilities(
@@ -51,6 +54,33 @@ public class GameScreen extends JFrame implements GlobalEventListener {
                 setState(ICONIFIED);
             }
 
+        });
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (e.getWindow().isDisplayable()) {
+                    GlobalEvents.instance().fireApplicationClosingEvent(
+                            GlobalEvents.Game_Window_Closed, true);
+                }
+            }
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
         });
         setVisible(true);
     }
@@ -75,9 +105,9 @@ public class GameScreen extends JFrame implements GlobalEventListener {
 
     @Override
     public void dispose() {
+        super.dispose();
         Logger.instance().write("Game Screen has been closed successfully.",
                 3, false);
-        super.dispose();
     }
 
 }

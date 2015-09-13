@@ -53,6 +53,11 @@ public final class GlobalEvents extends EventObject<GlobalEventListener> {
      * There are no graphics threads left alive to render the game.</p>
      */
     public static final int No_Living_Graphics_Threads = 4;
+    /**
+     * <p>
+     * The GameScreen for the application has been closed.</p>
+     */
+    public static final int Game_Window_Closed = 5;
     //</editor-fold>
     /**
      * <p>

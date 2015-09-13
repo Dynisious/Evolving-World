@@ -11,8 +11,10 @@ package EvolvingWorld.AppUtils.Events;
  * @author Dynisious 08/09/2015
  * @version 0.1.1
  * @param <T> The Type of UpdateEvent which is thrown by this Updateable.
+ * @param <E> The Type of UpdateEvent which can cause this one.
  */
-public abstract class Updateable<T extends UpdateEvent> extends EventObject<UpdateListener<T>> {
+public abstract class Updateable<T extends UpdateEvent, E extends UpdateEvent>
+        extends EventObject<UpdateListener<T>> {
 
     /**
      * <p>
@@ -30,6 +32,35 @@ public abstract class Updateable<T extends UpdateEvent> extends EventObject<Upda
      */
     public T fireUpdateEvent() {
         final T event = getUpdateEvent();
+        if (!noListeners()) {
+            for (final UpdateListener l : getListeners(UpdateListener.class)) {
+                l.objectUpdated(event);
+            }
+        }
+        return event;
+    }
+
+    /**
+     * <p>
+     * Creates and returns a new UpdateEvent.</p>
+     *
+     * @param src The UpdateEvent which caused this one.
+     *
+     * @return The new UpdateEvent.
+     */
+    protected abstract T getUpdateEvent(final E src);
+
+    /**
+     * <p>
+     * Fires all UpdateListeners on this Object.</p>
+     *
+     * @param <E> The type of UpdateEvent which caused this one.
+     * @param src The UpdateEvent which caused this one.
+     *
+     * @return The UpdateEvent used in this Update.
+     */
+    public T fireUpdateEvent(final E src) {
+        final T event = getUpdateEvent(src);
         if (!noListeners()) {
             for (final UpdateListener l : getListeners(UpdateListener.class)) {
                 l.objectUpdated(event);

@@ -155,7 +155,28 @@ public final class Application {
                     final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new AtmosphereTile(x, y, AtmosphereConstants.fair);
+                            tiles[x][y] = new AtmosphereTile(x, y,
+                                    Math.random() * 40, Math.random(),
+                                    0.05 * Math.random() + 0.95, 0, 0, 0,
+                                    AtmosphereConstants.Fair, 0.08);
+                        }
+                    }
+                    for (int z = 0; z < 10; z++) {
+                        final int x = (int) (Math.random() * MapTileConstants.xWorldSize);
+                        final int y = (int) (Math.random() * MapTileConstants.yWorldSize);
+                        for (int i = -2; i < 3; i++) {
+                            if (x + i > 0 && x + i < MapTileConstants.xWorldSize) {
+                                final int offset = (int) Math.sqrt(
+                                        4 - Math.pow(i, 2));
+                                for (int j = -offset; j < 1 + offset; j++) {
+                                    if (y + j > 0 && y + j < MapTileConstants.yWorldSize) {
+                                        tiles[x + i][y + j].setPressure(
+                                                0.8 * Math.hypot(i, j) / 3 + 0.2);
+                                        tiles[x + i][y + j].temperature
+                                        *= 2.4 / Math.hypot(i, j);
+                                    }
+                                }
+                            }
                         }
                     }
                     atmosphere = new AtmosphereTileMap(tiles);
@@ -168,7 +189,7 @@ public final class Application {
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
                             tiles[x][y] = new GeologyTile(x, y, new int[0],
-                                    new int[0], 0, Math.random() * 0.6 + 0.3);
+                                    new int[0], 0.5);
                         }
                     }
                     crust = new GeologyTileMap(tiles);
@@ -180,8 +201,9 @@ public final class Application {
                     final TopSoilTile[][] tiles = new TopSoilTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new TopSoilTile(x, y,
-                                    TopSoilConstants.Dirt);
+                            tiles[x][y] = new TopSoilTile(x, y, 0, 1
+                                    - atmosphere.getTile(x, y).getHumidity(),
+                                    0, TopSoilConstants.Dirt);
                         }
                     }
                     topSoil = new TopSoilTileMap(tiles);
@@ -189,6 +211,7 @@ public final class Application {
                 gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
             } //</editor-fold>
             GlobalEvents.instance().addListener(gameMap);
+            display.addKeyListener(gameMap.keys);
             final Application app = new Application(gameMap, display,
                     new GraphicsModule(graphicsThreads,
                             display.getBufferStrategy()));
@@ -199,7 +222,8 @@ public final class Application {
             Logger.instance().logWithStackTrace(
                     "ERROR : There was an error while creating the BufferStrategy for GameScreen: "
                     + ex.getMessage(), 1, true, ex.getStackTrace());
-            GlobalEvents.instance().fireApplicationClosingEvent(GlobalEvents.Error_In_Buffer_Strategy_Initialisation, true);
+            GlobalEvents.instance().fireApplicationClosingEvent(
+                    GlobalEvents.Error_In_Buffer_Strategy_Initialisation, true);
         }
     }
 

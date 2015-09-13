@@ -8,6 +8,7 @@ package EvolvingWorld.WorldMap.TopSoil;
  * @version 0.0.1
  */
 public interface TopSoilConstants {
+    //<editor-fold defaultstate="collapsed" desc="TopSoil Types">
     /**
      * <p>
      * Flat grassy plains for kilometers. So-so fertility, not much
@@ -28,4 +29,6 @@ public interface TopSoilConstants {
     public int Clay = 8;
     public int Mud = 9;
     public int Bog = 10;
+    //</editor-fold>
+    public double GroundWaterAbsorbtionRate = 0.002;
 }

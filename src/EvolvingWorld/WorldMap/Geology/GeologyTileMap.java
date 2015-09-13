@@ -11,7 +11,7 @@ import EvolvingWorld.WorldMap.WorldUpdateEvent;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent>
+public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent, WorldUpdateEvent>
         implements UpdateListener<WorldUpdateEvent> {
 
     /**
@@ -26,19 +26,27 @@ public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent>
     }
 
     @Override
-    protected GeologyUpdateEvent getUpdateEvent() {
-        return new GeologyUpdateEvent(this);
+    protected GeologyUpdateEvent getUpdateEvent()
+            throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+                "This is not a supported opperation for"
+                + getClass().getSimpleName());
     }
 
     @Override
     public void objectUpdated(final WorldUpdateEvent u) {
         Logger.instance().write("Updating world crust...", 10, false);
-        fireUpdateEvent();
+        fireUpdateEvent(u);
     }
 
     @Override
     public void applicationClosing(int reason) {
         clearListeners();
+    }
+
+    @Override
+    protected GeologyUpdateEvent getUpdateEvent(final WorldUpdateEvent src) {
+        return new GeologyUpdateEvent(src);
     }
 
 }

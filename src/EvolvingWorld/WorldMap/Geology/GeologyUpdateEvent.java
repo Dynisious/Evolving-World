@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.Geology;
 
-import EvolvingWorld.AppUtils.Events.UpdateEvent;
+import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -8,18 +8,16 @@ import EvolvingWorld.AppUtils.Events.UpdateEvent;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public final class GeologyUpdateEvent implements UpdateEvent {
-    public final GeologyTileMap crust; //The TopSoilTileMap which just updated.
+public final class GeologyUpdateEvent extends WorldUpdateEvent {
 
     /**
      * <p>
-     * Creates and returns a new AtmosphereUpdateEvent with the passed
-     * values.</p>
+     * Creates and returns a new GeologyUpdateEvent with the passed values.</p>
      *
-     * @param crust The TopSoilTileMap which just updated.
+     * @param event The WorldUpdateEvent which was just thrown.
      */
-    public GeologyUpdateEvent(final GeologyTileMap crust) {
-        this.crust = crust;
+    public GeologyUpdateEvent(final WorldUpdateEvent event) {
+        super(event.world, event.x, event.y);
     }
 
 }

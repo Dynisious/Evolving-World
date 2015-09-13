@@ -1,6 +1,6 @@
 package EvolvingWorld.WorldMap.TopSoil;
 
-import EvolvingWorld.AppUtils.Events.UpdateEvent;
+import EvolvingWorld.WorldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -8,18 +8,16 @@ import EvolvingWorld.AppUtils.Events.UpdateEvent;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public final class TopSoilUpdateEvent implements UpdateEvent {
-    public final TopSoilTileMap crust; //The TopSoilTileMap which just updated.
+public final class TopSoilUpdateEvent extends WorldUpdateEvent {
 
     /**
      * <p>
-     * Creates and returns a new AtmosphereUpdateEvent with the passed
-     * values.</p>
+     * Creates and returns a new TopSoilUpdateEvent with the passed values.</p>
      *
-     * @param crust The TopSoilTileMap which just updated.
+     * @param event The WorldUpdateEvent which just fired.
      */
-    public TopSoilUpdateEvent(final TopSoilTileMap crust) {
-        this.crust = crust;
+    public TopSoilUpdateEvent(final WorldUpdateEvent event) {
+        super(event.world, event.x, event.y);
     }
 
 }

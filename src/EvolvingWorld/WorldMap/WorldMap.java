@@ -1,12 +1,16 @@
 package EvolvingWorld.WorldMap;
 
 import EvolvingWorld.AppUtils.Events.GlobalEventListener;
+import EvolvingWorld.AppUtils.Events.UpdateEvent;
 import EvolvingWorld.AppUtils.Events.Updateable;
 import EvolvingWorld.AppUtils.GlobalEvents;
 import EvolvingWorld.AppUtils.Logger;
 import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
 import EvolvingWorld.WorldMap.Geology.GeologyTileMap;
 import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 /**
@@ -17,7 +21,7 @@ import java.util.TimerTask;
  * @author Dynisious 12/09/2015
  * @versions 0.0.1
  */
-public final class WorldMap extends Updateable<WorldUpdateEvent>
+public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
         implements GlobalEventListener {
     public final AtmosphereTileMap atmosphere; //The atmosphere of the world.
     public final GeologyTileMap crust; //The world's crust.
@@ -27,7 +31,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
     private final TimerTask task; //The TimerTask executed each update tick.
     public void startTick() {
         if (worldTick == null) {
-            worldTick = new Timer("EW: World Tick", true);
+            worldTick = new Timer("E-W: World Tick", true);
             worldTick.scheduleAtFixedRate(task, 0, tickPeriod);
             Logger.instance().write("Game tick has been started successfully.",
                     7, false);
@@ -44,8 +48,40 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
             }
         }
     }
-    private int viewX; //The x coordinate of the top leftmost Tile in view.
-    private int viewY; //The y coordinate of the top leftmost Tile in view.
+    private double viewX; //The x coordinate of the top leftmost Tile in view.
+    private double viewY; //The y coordinate of the top leftmost Tile in view.
+    private double xViewShift = 0; //The shift along the x axis for the view.
+    private double yViewShift = 0; //The shift along the y axis for the view.
+    public final KeyListener keys = new KeyAdapter() {
+
+        private final double shift = 0.1;
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                yViewShift -= shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                yViewShift += shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                xViewShift += shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                xViewShift -= shift;
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                yViewShift += shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                yViewShift -= shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                xViewShift -= shift;
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                xViewShift += shift;
+            }
+        }
+
+    };
 
     /**
      * <p>
@@ -54,7 +90,8 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
      * @param atmosphere The atmosphere of the world.
      * @param crust      The crust of the world.
      * @param topSoil    The top soil of the world.
-     * @param tickPeriod The number of milliseconds between each game tick.
+     * @param tickPeriod The number of milliseconds between each game
+     *                   tick.
      */
     public WorldMap(final AtmosphereTileMap atmosphere,
                     final GeologyTileMap crust, final TopSoilTileMap topSoil,
@@ -85,7 +122,11 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
 
     @Override
     protected WorldUpdateEvent getUpdateEvent() {
-        return new WorldUpdateEvent(this, viewX, viewY);
+        viewX = Double.max(0, Double.min(MapTileConstants.xWorldSize - 1,
+                viewX + xViewShift));
+        viewY = Double.max(0, Double.min(MapTileConstants.yWorldSize - 1,
+                viewY + yViewShift));
+        return new WorldUpdateEvent(this, (int) viewX, (int) viewY);
     }
 
     @Override
@@ -103,6 +144,13 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
         clearListeners();
         Logger.instance().write("Game world has been stopped successfully.",
                 4, false);
+    }
+
+    @Override
+    protected WorldUpdateEvent getUpdateEvent(UpdateEvent src) {
+        throw new UnsupportedOperationException(
+                "This is not a supported opperation for "
+                + getClass().getSimpleName());
     }
 
 }

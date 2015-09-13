@@ -9,10 +9,12 @@ import EvolvingWorld.AppUtils.Events.Updateable;
  * @author Dynisious 09/09/2015
  * @param <T> The type of Tile that this TileMap will hold.
  * @param <E> The type of UpdateEvent that gets thrown by this TileMap.
+ * @param <X> The type of UpdateEvent that can cause this UpdateAble to update.
  *
  * @versions 0.0.1
  */
-public abstract class TileMap<T extends Tile, E extends UpdateEvent> extends Updateable<E> {
+public abstract class TileMap<T extends Tile, E extends UpdateEvent, X extends UpdateEvent>
+        extends Updateable<E, X> {
     private T[][] tiles;
     public T[][] getTiles() {
         return tiles;
