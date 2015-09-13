@@ -9,6 +9,10 @@ package EvolvingWorld.WorldMap.Atmosphere;
  */
 public interface AtmosphereConstants {
     //<editor-fold defaultstate="collapsed" desc="Weather Types">
+    /**
+     * <p>
+     * Fair weather, no winds, nice temperature, low humidity.</p>
+     */
     public int fair = 0;
     public int overcast = 1;
     public int clear = 2;

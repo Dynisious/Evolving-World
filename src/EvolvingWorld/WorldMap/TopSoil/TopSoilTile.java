@@ -14,7 +14,8 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getFertility() {
         return fertility;
     }
-    public final void setFertitlity(final double val) throws IllegalArgumentException {
+    public final void setFertitlity(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
@@ -25,7 +26,8 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getWaterCont() {
         return waterCont;
     }
-    public final void setWaterCont(final double val) throws IllegalArgumentException {
+    public final void setWaterCont(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
@@ -36,7 +38,8 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
     public final double getPollution() {
         return pollution;
     }
-    public final void setPollution(final double val) throws IllegalArgumentException {
+    public final void setPollution(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
                     "ERROR : The parameter val has limits 0 <= val <= 1, val=" + val);
@@ -56,6 +59,11 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
      */
     public final void setSoilType(final int soilType) {
         this.soilType = soilType;
+        if (soilType == TopSoilConstants.Dirt) {
+            fertility = 0.8;
+            waterCont = 0.3;
+            pollution = 0.02;
+        }
     }
 
     /**
@@ -83,8 +91,8 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
      * @param pollution The pollution of the soil in this TopSoilTile.
      */
     public TopSoilTile(final int x, final int y, final double fertility,
-                       final double waterCont,
-                       final double pollution, final int soilType) {
+                       final double waterCont, final double pollution,
+                       final int soilType) {
         super(x, y);
         setSoilType(soilType);
         setFertitlity(fertility);

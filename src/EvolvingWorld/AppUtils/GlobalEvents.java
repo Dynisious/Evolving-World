@@ -27,10 +27,32 @@ public final class GlobalEvents extends EventObject<GlobalEventListener> {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Reasons to Close">
+    /**
+     * <p>
+     * This is a standard close operation with no abnormalities.</p>
+     */
     public static final int Standard_Close_Operation = 0;
+    /**
+     * <p>
+     * The user wishes to restart the application.</p>
+     */
     public static final int Application_Restarting = 1;
-    public static final int Error_In_Execution = 2;
-    public static final int Error_In_Screen_Buffer_Initialisation = 3;
+    /**
+     * <p>
+     * There was an error while executing the update loop for the game.</p>
+     */
+    public static final int Error_In_Game_Execution = 2;
+    /**
+     * <p>
+     * There was an error while trying to create the BufferStrategy for
+     * displaying the games graphics.</p>
+     */
+    public static final int Error_In_Buffer_Strategy_Initialisation = 3;
+    /**
+     * <p>
+     * There are no graphics threads left alive to render the game.</p>
+     */
+    public static final int No_Living_Graphics_Threads = 4;
     //</editor-fold>
     /**
      * <p>

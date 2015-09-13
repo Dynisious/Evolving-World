@@ -12,6 +12,8 @@ import EvolvingWorld.WorldMap.TopSoil.TopSoilTile;
 import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
 import EvolvingWorld.WorldMap.WorldMap;
 import EvolvingWorld.Graphical.GameScreen;
+import EvolvingWorld.WorldMap.Atmosphere.AtmosphereConstants;
+import EvolvingWorld.WorldMap.TopSoil.TopSoilConstants;
 import java.awt.AWTException;
 import java.util.Scanner;
 /**
@@ -153,7 +155,7 @@ public final class Application {
                     final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new AtmosphereTile(x, y, 0);
+                            tiles[x][y] = new AtmosphereTile(x, y, AtmosphereConstants.fair);
                         }
                     }
                     atmosphere = new AtmosphereTileMap(tiles);
@@ -166,7 +168,7 @@ public final class Application {
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
                             tiles[x][y] = new GeologyTile(x, y, new int[0],
-                                    new int[0], 0, 0);
+                                    new int[0], 0, Math.random() * 0.6 + 0.3);
                         }
                     }
                     crust = new GeologyTileMap(tiles);
@@ -178,7 +180,8 @@ public final class Application {
                     final TopSoilTile[][] tiles = new TopSoilTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
                     for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
                         for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new TopSoilTile(x, y, 0);
+                            tiles[x][y] = new TopSoilTile(x, y,
+                                    TopSoilConstants.Dirt);
                         }
                     }
                     topSoil = new TopSoilTileMap(tiles);
@@ -196,8 +199,7 @@ public final class Application {
             Logger.instance().logWithStackTrace(
                     "ERROR : There was an error while creating the BufferStrategy for GameScreen: "
                     + ex.getMessage(), 1, true, ex.getStackTrace());
-            GlobalEvents.instance().fireApplicationClosingEvent(
-                    GlobalEvents.Error_In_Screen_Buffer_Initialisation, true);
+            GlobalEvents.instance().fireApplicationClosingEvent(GlobalEvents.Error_In_Buffer_Strategy_Initialisation, true);
         }
     }
 

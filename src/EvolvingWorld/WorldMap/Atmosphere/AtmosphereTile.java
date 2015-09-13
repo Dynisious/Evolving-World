@@ -29,9 +29,9 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
     }
     public final void setPressure(final double val) throws
             IllegalArgumentException {
-        if (val < 0) {
+        if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
-                    "ERROR : val must be greater than or equal to 0. val="
+                    "ERROR : val must be between 0 and 1. val="
                     + String.format("%-10.2f", val));
         }
         pressure = val;
@@ -87,6 +87,11 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
      */
     public final void setWeather(final int weather) {
         this.weather = weather;
+        if (weather == AtmosphereConstants.fair) {
+            humidity = 0.1;
+            pressure = Math.random();
+            temperature = 22;
+        }
     }
 
     /**

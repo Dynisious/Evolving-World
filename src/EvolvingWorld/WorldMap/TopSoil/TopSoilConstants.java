@@ -8,6 +8,11 @@ package EvolvingWorld.WorldMap.TopSoil;
  * @version 0.0.1
  */
 public interface TopSoilConstants {
+    /**
+     * <p>
+     * Flat grassy plains for kilometers. So-so fertility, not much
+     * moisture.</p>
+     */
     public int Plains = 0;
     public int RockyPlains = 1;
     public int Mountain = 2;
@@ -15,6 +20,10 @@ public interface TopSoilConstants {
     public int River = 4;
     public int Shore = 5;
     public int Ocean = 6;
+    /**
+     * <p>
+     * Plain dirt. Decent fertility and water content.</p>
+     */
     public int Dirt = 7;
     public int Clay = 8;
     public int Mud = 9;

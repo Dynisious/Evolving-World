@@ -57,7 +57,7 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
         this.drawers = new Drawer[threads];
         for (int i = 0; i < threads; i++) {
             final Drawer d = new Drawer(i);
-            drawers[i] = new Drawer(i);
+            drawers[i] = d;
             GlobalEvents.instance().addListener(d);
             d.start();
         }
@@ -75,13 +75,15 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
 
     @Override
     public void applicationClosing(int reason) {
-        for (final Drawer d : drawers) {
-            d.alive = false;
+        synchronized (drawers) {
+            for (final Drawer d : drawers) {
+                d.executing = false;
+            }
         }
     }
 
     private final class Drawer extends Thread implements GlobalEventListener {
-        public boolean alive = true; //This boolean keeps the Thread alive.
+        public boolean executing = true; //This boolean keeps the Thread executing.
 
         public Drawer(final int id) {
             super("E-W: Renderer" + id);
@@ -91,12 +93,12 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
         @Override
         public void run() {
             Logger.instance().write("Thread successfully started.", 3, false);
-            do { //Loop as long as the the drawer is alive.
+            do { //Loop as long as the the drawer is executing.
                 //<editor-fold defaultstate="collapsed" desc="Wait for next frame">
                 try {
                     nextFrameSignal.acquire();
                 } catch (InterruptedException ex) {
-                    if (alive) {
+                    if (executing) {
                         Logger.instance().logWithStackTrace(
                                 "ERROR : The thread was interrupted while waiting for the next frame to be passed.",
                                 4, false, ex.getStackTrace());
@@ -108,19 +110,14 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
                 //</editor-fold>
                 final WorldUpdateEvent data; //The data to use to render the
                 //next frame.
-                final long frameID; //The ID of the frame being rendered.
                 //<editor-fold defaultstate="collapsed" desc="Collect frame data">
                 synchronized (nextFrameSignal) {
                     data = frameData;
-                    if (data != null) {
-                        frameID = getNextFrameId();
-                        frameData = null;
-                    } else {
-                        frameID = -1;
-                    }
                 }
                 //</editor-fold>
                 if (data != null) { //Data was aquired for this frame.
+                    final long frameID = getNextFrameId(); //The ID of the frame
+                    //being rendered.
                     Logger.instance().write("Currently drawing frame"
                             + frameID, 10, false);
                     try {
@@ -135,17 +132,16 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
                         if (g == null) { //The game screen closed.
                             break;
                         }
-                        final int tileWidth; //The number of tiles that fit across
+                        final int xDepth; //The number of tiles that fit across
                         //the screen.
-                        final int tileHeight; //The number of tiles that fit up the
-                        //screen.
+                        final int yDepth; //The number of tiles that fit down
+                        //the screen.
                         /*<editor-fold defaultstate="collapsed" desc="Calculate Dimentions">*/ {
                             final DisplayMode dm = GraphicsEnvironment.getLocalGraphicsEnvironment()
                                     .getDefaultScreenDevice().getDisplayMode();
-                            tileWidth = (int) Math.ceil(((double) dm.getWidth())
+                            xDepth = (int) Math.ceil((double) dm.getWidth()
                                     / MapTileConstants.TileSideLength);
-                            tileHeight = (int) Math.ceil(
-                                    ((double) dm.getHeight())
+                            yDepth = (int) Math.ceil(((double) dm.getHeight())
                                     / MapTileConstants.TileSideLength);
                             g.translate(-Math.floorMod(dm.getWidth(),
                                     MapTileConstants.TileSideLength) / 2,
@@ -153,31 +149,34 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
                                             MapTileConstants.TileSideLength) / 2);
                             //Offset the map to evenly display all visible Tiles.
                         } //</editor-fold>
-                        g.setColor(new Color(0, 0, 0, 255));
-                        for (int x = 0; x < tileWidth; x++) {
-                            for (int y = 0; y < tileHeight; y++) {
+                        for (int i = 0; i < xDepth; i++) {
+                            final int x = data.x + i;
+                            for (int j = 0; j < yDepth; j++) {
+                                final int y = data.y + j;
                                 g.setColor(new Color(
-                                        g.getColor().getRed(),
-                                        g.getColor().getGreen() + 4,
-                                        g.getColor().getBlue(),
-                                        g.getColor().getAlpha()));
+                                        (float) data.world.crust.getTile(x,
+                                                y).getIntegrity(),
+                                        (float) data.world.topSoil.getTile(x,
+                                                y).getFertility(),
+                                        (float) data.world.atmosphere.getTile(
+                                                x, y).getHumidity(),
+                                        (float) data.world.atmosphere.getTile(
+                                                x, y).getPressure()));
                                 g.fillRect(x * MapTileConstants.TileSideLength,
                                         y * MapTileConstants.TileSideLength,
                                         MapTileConstants.TileSideLength,
                                         MapTileConstants.TileSideLength);
                             }
-                            g.setColor(new Color(
-                                    g.getColor().getRed() + 4, 0,
-                                    g.getColor().getBlue(),
-                                    g.getColor().getAlpha()));
                         }
                         //</editor-fold>
 
                         synchronized (strategy) {
+                            Logger.instance().write("Currently rendering frame"
+                                    + frameID, 10, false);
                             strategy.show(); //Display the graphics.
                         }
                     } catch (InterruptedException ex) {
-                        if (alive) {
+                        if (executing) {
                             Logger.instance().logWithStackTrace(
                                     "ERROR : The thread was interrupted while waiting for the frame to be ready to draw.",
                                     4, false, ex.getStackTrace());
@@ -185,10 +184,27 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
                         } else {
                             break;
                         }
+                    } catch (Exception ex) {
+                        executing = false;
+                        Logger.instance().logWithStackTrace(
+                                "ERROR : There was an exception during graphics rendering. Thread will exit: "
+                                + ex.getMessage(), 3, false, ex.getStackTrace());
+                        synchronized (drawers) {
+                            for (final Drawer d : drawers) {
+                                if (d.executing) { //There is a drawer still executing.
+                                    return;
+                                }
+                            }
+                        }
+                        Logger.instance().write(
+                                "No Graphics Threads remain alive. Application closing...",
+                                1, false);
+                        closedThreads.release();
+                        GlobalEvents.instance().fireApplicationClosingEvent(
+                                GlobalEvents.No_Living_Graphics_Threads, true);
                     }
                 }
-
-            } while (alive);
+            } while (executing);
             Logger.instance().write(getName()
                     + " has closed successfully.", 5, false);
             closedThreads.release(); //Alert that this Thread has closed.
@@ -196,8 +212,8 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
 
         @Override
         public void applicationClosing(int reason) {
-            alive = false;
-            if (isAlive()) { //Only wait on this thread if it is still alive.
+            executing = false;
+            if (isAlive()) { //Only wait on this thread if it is still executing.
                 interrupt();
                 try {
                     closedThreads.acquire(); //Wait for the drawing thread to

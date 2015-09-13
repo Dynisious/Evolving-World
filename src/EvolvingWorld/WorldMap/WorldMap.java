@@ -77,7 +77,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
                             + ex.getClass().getName() + ": " + ex.getMessage(),
                             1, true, ex.getStackTrace());
                     GlobalEvents.instance().fireApplicationClosingEvent(
-                            GlobalEvents.Error_In_Execution, true);
+                            GlobalEvents.Error_In_Game_Execution, true);
                 }
             }
         };

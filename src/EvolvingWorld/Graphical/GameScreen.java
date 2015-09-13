@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
 import java.awt.ImageCapabilities;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JFrame;
 /**
  * <p>
@@ -33,10 +35,23 @@ public class GameScreen extends JFrame implements GlobalEventListener {
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         adjustSize();
-        getContentPane().setBackground(Color.MAGENTA);
+        getContentPane().setBackground(Color.BLACK);
         this.createBufferStrategy(backBuffers, new BufferCapabilities(
                 new ImageCapabilities(true), new ImageCapabilities(true),
                 BufferCapabilities.FlipContents.BACKGROUND));
+        addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                setState(NORMAL);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                setState(ICONIFIED);
+            }
+
+        });
         setVisible(true);
     }
 

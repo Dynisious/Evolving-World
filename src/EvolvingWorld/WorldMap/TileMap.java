@@ -17,6 +17,9 @@ public abstract class TileMap<T extends Tile, E extends UpdateEvent> extends Upd
     public T[][] getTiles() {
         return tiles;
     }
+    public T getTile(final int x, final int y) {
+        return tiles[x][y];
+    }
 
     protected TileMap(final T[][] tiles) {
         this.tiles = tiles;
