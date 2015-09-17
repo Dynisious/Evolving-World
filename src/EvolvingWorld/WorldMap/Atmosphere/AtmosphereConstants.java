@@ -1,4 +1,4 @@
-package EvolvingWorld.WorldMap.Atmosphere;
+package evolvingWorld.worldMap.atmosphere;
 
 /**
  * <p>
@@ -32,7 +32,4 @@ public interface AtmosphereConstants {
     public int Muggy = 8;
     public int Stormy = 9;
     //</editor-fold>
-    public double FairHumidityChangeCoefficient = 0.002;
-    public double RainyHumidityChangeCoefficient = 0.002;
-    public double HailHumidityChangeCoefficient = 0.004;
 }

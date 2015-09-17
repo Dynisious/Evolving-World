@@ -1,20 +1,20 @@
-package EvolvingWorld;
+package evolvingWorld;
 
-import EvolvingWorld.AppUtils.GlobalEvents;
-import EvolvingWorld.AppUtils.Logger;
-import EvolvingWorld.Graphical.GraphicsModule;
-import EvolvingWorld.WorldMap.MapTileConstants;
-import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTile;
-import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
-import EvolvingWorld.WorldMap.Geology.GeologyTile;
-import EvolvingWorld.WorldMap.Geology.GeologyTileMap;
-import EvolvingWorld.WorldMap.TopSoil.TopSoilTile;
-import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
-import EvolvingWorld.WorldMap.WorldMap;
-import EvolvingWorld.Graphical.GameScreen;
-import EvolvingWorld.WorldMap.Atmosphere.AtmosphereConstants;
-import EvolvingWorld.WorldMap.TopSoil.TopSoilConstants;
+import evolvingWorld.appUtils.GlobalEvents;
+import evolvingWorld.appUtils.Logger;
+import evolvingWorld.graphical.GraphicsModule;
+import evolvingWorld.worldMap.WorldMap;
+import evolvingWorld.graphical.GameScreen;
+import evolvingWorld.worldMap.atmosphere.AtmosphereTile;
+import evolvingWorld.worldMap.atmosphere.AtmosphereTileMap;
+import evolvingWorld.worldMap.geology.GeologyTile;
+import evolvingWorld.worldMap.geology.GeologyTileMap;
+import evolvingWorld.worldMap.MapTileConstants;
+import evolvingWorld.worldMap.topSoil.TopSoilTile;
+import evolvingWorld.worldMap.topSoil.TopSoilTileMap;
 import java.awt.AWTException;
+import java.awt.BufferCapabilities;
+import java.awt.ImageCapabilities;
 import java.util.Scanner;
 /**
  * <p>
@@ -41,8 +41,11 @@ public final class Application {
     public Application(final WorldMap gameMap, final GameScreen screen,
                        final GraphicsModule gMod) {
         this.gameMap = gameMap;
+        GlobalEvents.instance().addListener(gameMap);
         this.screen = screen;
+        GlobalEvents.instance().addListener(screen);
         this.gMod = gMod;
+        GlobalEvents.instance().addListener(gMod);
         gameMap.addListener(gMod);
         gameMap.startTick();
     }
@@ -59,7 +62,7 @@ public final class Application {
         Thread.currentThread().setName("E-W: Main Thread");
         Logger.setLogFile("Log.log"); //Default file to write the log to.
         final long tickPeriod; //The number of milliseconds between game ticks.
-        final int graphicsThreads; //The number of graphics threads to be used.
+        final int gThreads; //The number of graphics threads to be used.
         /*<editor-fold defaultstate="collapsed" desc="Command Line Arguments">*/ {
             long tempTickPeriod = 50;
             int tempGraphicsThreads = 1;
@@ -75,7 +78,7 @@ public final class Application {
                 }
             }
             tickPeriod = tempTickPeriod;
-            graphicsThreads = tempGraphicsThreads;
+            gThreads = tempGraphicsThreads;
         } //</editor-fold>
 
         Logger.instance().write("App is starting initialisation.", 1, true);
@@ -141,80 +144,17 @@ public final class Application {
         commandline.setDaemon(false);
         commandline.start();
         //</editor-fold>
+
         Logger.instance().write("Initialising instance of the game...", 2, true);
         Logger.instance().write("Initialising game map...", 3, true);
         try {
-            final GameScreen display = new GameScreen(graphicsThreads);
-            GlobalEvents.instance().addListener(display);
-            final WorldMap gameMap;
-            /*<editor-fold defaultstate="collapsed" desc="World Map">*/ {
-                Logger.instance().write("Initialising game world atmosphere...",
-                        4, true);
-                final AtmosphereTileMap atmosphere;
-                /*<editor-fold defaultstate="collapsed" desc="Atmosphere Layer">*/ {
-                    final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
-                    for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
-                        for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new AtmosphereTile(x, y,
-                                    Math.random() * 40, Math.random(),
-                                    0.05 * Math.random() + 0.95, 0, 0, 0,
-                                    AtmosphereConstants.Fair, 0.08);
-                        }
-                    }
-                    for (int z = 0; z < 10; z++) {
-                        final int x = (int) (Math.random() * MapTileConstants.xWorldSize);
-                        final int y = (int) (Math.random() * MapTileConstants.yWorldSize);
-                        for (int i = -2; i < 3; i++) {
-                            if (x + i > 0 && x + i < MapTileConstants.xWorldSize) {
-                                final int offset = (int) Math.sqrt(
-                                        4 - Math.pow(i, 2));
-                                for (int j = -offset; j < 1 + offset; j++) {
-                                    if (y + j > 0 && y + j < MapTileConstants.yWorldSize) {
-                                        tiles[x + i][y + j].setPressure(
-                                                0.8 * Math.hypot(i, j) / 3 + 0.2);
-                                        tiles[x + i][y + j].temperature
-                                        *= 2.4 / Math.hypot(i, j);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    atmosphere = new AtmosphereTileMap(tiles);
-                } //</editor-fold>
-                Logger.instance().write("Initialising game world crust...", 4,
-                        true);
-                final GeologyTileMap crust;
-                /*<editor-fold defaultstate="collapsed" desc="Geology Layer">*/ {
-                    final GeologyTile[][] tiles = new GeologyTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
-                    for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
-                        for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new GeologyTile(x, y, new int[0],
-                                    new int[0], 0.5);
-                        }
-                    }
-                    crust = new GeologyTileMap(tiles);
-                } //</editor-fold>
-                Logger.instance().write("Initialising game world soils...", 4,
-                        true);
-                final TopSoilTileMap topSoil;
-                /*<editor-fold defaultstate="collapsed" desc="TopSoil Layer">*/ {
-                    final TopSoilTile[][] tiles = new TopSoilTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
-                    for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
-                        for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
-                            tiles[x][y] = new TopSoilTile(x, y, 0, 1
-                                    - atmosphere.getTile(x, y).getHumidity(),
-                                    0, TopSoilConstants.Dirt);
-                        }
-                    }
-                    topSoil = new TopSoilTileMap(tiles);
-                } //</editor-fold>
-                gameMap = new WorldMap(atmosphere, crust, topSoil, tickPeriod);
-            } //</editor-fold>
-            GlobalEvents.instance().addListener(gameMap);
-            display.addKeyListener(gameMap.keys);
+            final GameScreen display = new GameScreen();
+            display.createBufferStrategy(gThreads, new BufferCapabilities(
+                    new ImageCapabilities(true), new ImageCapabilities(true),
+                    BufferCapabilities.FlipContents.BACKGROUND));
+            final WorldMap gameMap = initialiseGameWorld(tickPeriod);
             final Application app = new Application(gameMap, display,
-                    new GraphicsModule(graphicsThreads,
-                            display.getBufferStrategy()));
+                    new GraphicsModule(gThreads, display.getBufferStrategy()));
             Logger.instance().write(
                     "App has completed initialisation. Type \"help\" for console commands.",
                     1, true);
@@ -225,6 +165,56 @@ public final class Application {
             GlobalEvents.instance().fireApplicationClosingEvent(
                     GlobalEvents.Error_In_Buffer_Strategy_Initialisation, true);
         }
+    }
+
+    /**
+     * <p>
+     * Creates and returns a new WorldMap.</p>
+     *
+     * @param tickPeriod The number of milliseconds between each world tick.
+     *
+     * @return The new WorldMap.
+     */
+    private static WorldMap initialiseGameWorld(final long tickPeriod) {
+        Logger.instance().write("Initialising game world atmosphere...",
+                4, true);
+        final AtmosphereTileMap atmosphere;
+        /*<editor-fold defaultstate="collapsed" desc="Atmosphere Layer">*/ {
+            final AtmosphereTile[][] tiles = new AtmosphereTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
+            for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
+                for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
+                    tiles[x][y] = new AtmosphereTile(x, y, 0, 0, 0, 0, 0,
+                            0, 0);
+                }
+            }
+            atmosphere = new AtmosphereTileMap(tiles);
+        } //</editor-fold>
+        Logger.instance().write("Initialising game world crust...", 4,
+                true);
+        final GeologyTileMap crust;
+        /*<editor-fold defaultstate="collapsed" desc="Geology Layer">*/ {
+            final GeologyTile[][] tiles = new GeologyTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
+            for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
+                for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
+                    tiles[x][y] = new GeologyTile(x, y, new int[0],
+                            new int[0], 0);
+                }
+            }
+            crust = new GeologyTileMap(tiles);
+        } //</editor-fold>
+        Logger.instance().write("Initialising game world soils...", 4,
+                true);
+        final TopSoilTileMap topSoil;
+        /*<editor-fold defaultstate="collapsed" desc="TopSoil Layer">*/ {
+            final TopSoilTile[][] tiles = new TopSoilTile[MapTileConstants.xWorldSize][MapTileConstants.yWorldSize];
+            for (int x = 0; x < MapTileConstants.xWorldSize; x++) {
+                for (int y = 0; y < MapTileConstants.yWorldSize; y++) {
+                    tiles[x][y] = new TopSoilTile(x, y, 0, 0, 0, 0);
+                }
+            }
+            topSoil = new TopSoilTileMap(tiles);
+        } //</editor-fold>
+        return new WorldMap(atmosphere, crust, topSoil, tickPeriod);
     }
 
 }

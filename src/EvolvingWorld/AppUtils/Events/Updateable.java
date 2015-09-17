@@ -1,4 +1,4 @@
-package EvolvingWorld.AppUtils.Events;
+package evolvingWorld.appUtils.events;
 /**
  * <p>
  * All Objects which intend to use an fire UpdateEvents function and would like
@@ -15,30 +15,6 @@ package EvolvingWorld.AppUtils.Events;
  */
 public abstract class Updateable<T extends UpdateEvent, E extends UpdateEvent>
         extends EventObject<UpdateListener<T>> {
-
-    /**
-     * <p>
-     * Creates and returns a new UpdateEvent.</p>
-     *
-     * @return The new UpdateEvent.
-     */
-    protected abstract T getUpdateEvent();
-
-    /**
-     * <p>
-     * Fires all UpdateListeners on this Object.</p>
-     *
-     * @return The UpdateEvent used in this Update.
-     */
-    public T fireUpdateEvent() {
-        final T event = getUpdateEvent();
-        if (!noListeners()) {
-            for (final UpdateListener l : getListeners(UpdateListener.class)) {
-                l.objectUpdated(event);
-            }
-        }
-        return event;
-    }
 
     /**
      * <p>

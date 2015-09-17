@@ -1,9 +1,9 @@
-package EvolvingWorld.WorldMap.Atmosphere;
+package evolvingWorld.worldMap.atmosphere;
 
-import EvolvingWorld.AppUtils.Events.UpdateListener;
-import EvolvingWorld.AppUtils.Logger;
-import EvolvingWorld.WorldMap.TileMap;
-import EvolvingWorld.WorldMap.WorldUpdateEvent;
+import evolvingWorld.appUtils.events.UpdateListener;
+import evolvingWorld.appUtils.Logger;
+import evolvingWorld.worldMap.TileMap;
+import evolvingWorld.worldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -23,14 +23,6 @@ public class AtmosphereTileMap extends TileMap<AtmosphereTile, AtmosphereUpdateE
      */
     public AtmosphereTileMap(final AtmosphereTile[][] atmosphere) {
         super(atmosphere);
-    }
-
-    @Override
-    protected AtmosphereUpdateEvent getUpdateEvent()
-            throws UnsupportedOperationException {
-        throw new UnsupportedOperationException(
-                "This is not a supported opperation for "
-                + getClass().getSimpleName());
     }
 
     @Override

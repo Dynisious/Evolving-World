@@ -1,6 +1,6 @@
-package EvolvingWorld.WorldMap;
+package evolvingWorld.worldMap;
 
-import EvolvingWorld.AppUtils.Events.UpdateEvent;
+import evolvingWorld.appUtils.events.UpdateEvent;
 import java.util.concurrent.Semaphore;
 /**
  * <p>

@@ -1,4 +1,4 @@
-package EvolvingWorld.AppUtils.Events;
+package evolvingWorld.appUtils.events;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

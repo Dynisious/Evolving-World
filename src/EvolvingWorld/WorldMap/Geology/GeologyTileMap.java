@@ -1,9 +1,9 @@
-package EvolvingWorld.WorldMap.Geology;
+package evolvingWorld.worldMap.geology;
 
-import EvolvingWorld.AppUtils.Events.UpdateListener;
-import EvolvingWorld.AppUtils.Logger;
-import EvolvingWorld.WorldMap.TileMap;
-import EvolvingWorld.WorldMap.WorldUpdateEvent;
+import evolvingWorld.appUtils.events.UpdateListener;
+import evolvingWorld.appUtils.Logger;
+import evolvingWorld.worldMap.TileMap;
+import evolvingWorld.worldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -23,14 +23,6 @@ public class GeologyTileMap extends TileMap<GeologyTile, GeologyUpdateEvent, Wor
      */
     public GeologyTileMap(final GeologyTile[][] crust) {
         super(crust);
-    }
-
-    @Override
-    protected GeologyUpdateEvent getUpdateEvent()
-            throws UnsupportedOperationException {
-        throw new UnsupportedOperationException(
-                "This is not a supported opperation for"
-                + getClass().getSimpleName());
     }
 
     @Override

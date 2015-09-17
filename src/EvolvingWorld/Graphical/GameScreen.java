@@ -1,16 +1,16 @@
-package EvolvingWorld.Graphical;
+package evolvingWorld.graphical;
 
-import EvolvingWorld.AppUtils.Events.GlobalEventListener;
-import EvolvingWorld.AppUtils.GlobalEvents;
-import EvolvingWorld.AppUtils.Logger;
+import evolvingWorld.appUtils.events.GlobalEventListener;
+import evolvingWorld.appUtils.GlobalEvents;
+import evolvingWorld.appUtils.Logger;
 import java.awt.AWTException;
-import java.awt.BufferCapabilities;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
-import java.awt.ImageCapabilities;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
@@ -22,6 +22,22 @@ import javax.swing.JFrame;
  * @versions 0.0.1
  */
 public class GameScreen extends JFrame implements GlobalEventListener {
+    private static final KeyListener menuKeys = new KeyListener() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                e.consume();
+                GlobalEvents.instance().fireApplicationClosingEvent(
+                        GlobalEvents.Standard_Close_Operation, true);
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+    };
 
     /**
      * <p>
@@ -33,15 +49,12 @@ public class GameScreen extends JFrame implements GlobalEventListener {
      * @throws AWTException Thrown if there is an issue creating the double
      *                      buffer strategy.
      */
-    public GameScreen(final int backBuffers) throws AWTException {
+    public GameScreen() {
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         adjustSize();
         getContentPane().setBackground(Color.BLACK);
-        this.createBufferStrategy(backBuffers, new BufferCapabilities(
-                new ImageCapabilities(true), new ImageCapabilities(true),
-                BufferCapabilities.FlipContents.BACKGROUND));
         addFocusListener(new FocusListener() {
 
             @Override
@@ -82,6 +95,7 @@ public class GameScreen extends JFrame implements GlobalEventListener {
             public void windowDeactivated(WindowEvent e) {
             }
         });
+        addKeyListener(menuKeys);
         setVisible(true);
     }
 

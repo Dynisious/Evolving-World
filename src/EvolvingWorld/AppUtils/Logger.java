@@ -1,4 +1,4 @@
-package EvolvingWorld.AppUtils;
+package evolvingWorld.appUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;

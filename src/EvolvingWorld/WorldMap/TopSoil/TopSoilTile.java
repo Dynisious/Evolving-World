@@ -1,7 +1,6 @@
-package EvolvingWorld.WorldMap.TopSoil;
+package evolvingWorld.worldMap.topSoil;
 
-import EvolvingWorld.WorldMap.Geology.GeologyTile;
-import EvolvingWorld.WorldMap.Tile;
+import evolvingWorld.worldMap.Tile;
 /**
  * <p>
  * Holds all the values associated with the topsoil on a tile of the game
@@ -103,19 +102,7 @@ public class TopSoilTile extends Tile<TopSoilUpdateEvent> {
 
     @Override
     public void objectUpdated(TopSoilUpdateEvent u) {
-        final GeologyTile crust = u.world.crust.getTile(x, y); //The crust layer
-        final double groundWater; //The amount of water that is drawn up to the soil.
-        if (crust.getWaterTable() < 0.25) { //Drain water.
-            groundWater = -Double.min(waterContent, Double.min(
-                    1 - crust.getWaterTable(),
-                    TopSoilConstants.GroundWaterAbsorbtionRate));
-        } else { //Pull water.
-            groundWater = Double.min(1 - waterContent, Double.min(
-                    crust.getWaterTable(),
-                    TopSoilConstants.GroundWaterAbsorbtionRate));
-        }
-        setWaterContent(waterContent + groundWater);
-        crust.setWaterTable(crust.getWaterTable() - groundWater);
+        
     }
 
 }

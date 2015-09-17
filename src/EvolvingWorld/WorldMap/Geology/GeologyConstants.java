@@ -1,4 +1,4 @@
-package EvolvingWorld.WorldMap.Geology;
+package evolvingWorld.worldMap.geology;
 
 /**
  * <p>

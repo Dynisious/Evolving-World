@@ -1,9 +1,9 @@
-package EvolvingWorld.WorldMap.TopSoil;
+package evolvingWorld.worldMap.topSoil;
 
-import EvolvingWorld.AppUtils.Events.UpdateListener;
-import EvolvingWorld.AppUtils.Logger;
-import EvolvingWorld.WorldMap.TileMap;
-import EvolvingWorld.WorldMap.WorldUpdateEvent;
+import evolvingWorld.appUtils.events.UpdateListener;
+import evolvingWorld.appUtils.Logger;
+import evolvingWorld.worldMap.TileMap;
+import evolvingWorld.worldMap.WorldUpdateEvent;
 /**
  * <p>
  * </p>
@@ -34,14 +34,6 @@ public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent, Wor
     @Override
     public void applicationClosing(int reason) {
         clearListeners();
-    }
-
-    @Override
-    protected TopSoilUpdateEvent getUpdateEvent()
-            throws UnsupportedOperationException {
-        throw new UnsupportedOperationException(
-                "This is not a supported operation for "
-                + getClass().getSimpleName());
     }
 
     @Override

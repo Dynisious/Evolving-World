@@ -1,4 +1,4 @@
-package EvolvingWorld.WorldMap.TopSoil;
+package evolvingWorld.worldMap.topSoil;
 
 /**
  * <p>

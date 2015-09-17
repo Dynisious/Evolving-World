@@ -1,6 +1,6 @@
-package EvolvingWorld.WorldMap;
+package evolvingWorld.worldMap;
 
-import EvolvingWorld.AppUtils.Events.UpdateListener;
+import evolvingWorld.appUtils.events.UpdateListener;
 /**
  * <p>
  * A tagging interface to identify tiles which would be stored in a TileMap.</p>

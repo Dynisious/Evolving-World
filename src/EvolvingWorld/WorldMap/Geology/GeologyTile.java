@@ -1,7 +1,6 @@
-package EvolvingWorld.WorldMap.Geology;
+package evolvingWorld.worldMap.geology;
 
-import EvolvingWorld.WorldMap.MapTileConstants;
-import EvolvingWorld.WorldMap.Tile;
+import evolvingWorld.worldMap.Tile;
 /**
  * <p>
  * GeologyTiles hold all the values associated with geological activity or
@@ -62,36 +61,10 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
         setWaterTable(waterTable);
         setIntegrity(integrity);
     }
-    
+
     @Override
     public void objectUpdated(GeologyUpdateEvent u) {
-        final GeologyTile[][] crust = u.world.crust.getTiles(); //The crust layer.
-        for (int i = -1; i < 2; i++) {
-            if (x + i > 0 && x + i < MapTileConstants.xWorldSize) {
-                for (int j = -1; j < 2; j++) {
-                    if (i != 0 && j != 0 && y + j > 0
-                            && y + j < MapTileConstants.yWorldSize) { //It's not
-                        //this tile.
-                        final GeologyTile t = crust[x + i][y + j]; //The tile
-                        //being flowed to.
-                        final double flow; //The water moving between this tile
-                        //and the adjacent tile.
-                        if (t.getWaterTable() < waterTable) { //Flow to this tile.
-                            flow = Double.max(t.getWaterTable() - waterTable,
-                                    Double.max(-t.getWaterTable() / waterTable,
-                                            waterTable - 1));
-                        } else { //Flow from this tile.
-                            flow = Double.min(t.getWaterTable() - waterTable,
-                                    Double.min(t.getWaterTable() / waterTable,
-                                            1 - waterTable));
-                        }
-                        setWaterTable(waterTable + flow);
-                        t.setWaterTable(t.getWaterTable() - flow);
-                    }
-                }
-            }
-        }
-        setIntegrity(1 - waterTable);
+
     }
 
 }

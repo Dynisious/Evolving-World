@@ -1,4 +1,4 @@
-package EvolvingWorld.WorldMap;
+package evolvingWorld.worldMap;
 
 /**
  * <p>

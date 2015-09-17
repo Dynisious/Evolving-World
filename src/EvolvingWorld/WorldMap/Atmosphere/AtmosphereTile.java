@@ -1,8 +1,6 @@
-package EvolvingWorld.WorldMap.Atmosphere;
+package evolvingWorld.worldMap.atmosphere;
 
-import EvolvingWorld.WorldMap.Geology.GeologyTile;
-import EvolvingWorld.WorldMap.Tile;
-import EvolvingWorld.WorldMap.TopSoil.TopSoilTile;
+import evolvingWorld.worldMap.Tile;
 /**
  * <p>
  * Stores all data concerning the atmosphere in a Tile.</p>
@@ -77,36 +75,31 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
         charge = val;
     }
     public int weather; //The type of weather currently in this Tile.
-    private double heatChangeCoefficient; //The amount of heat that gets gained
-    //relative to the humidity.
 
     /**
      * <p>
      * Creates and returns a new instance of AtmosphereTile with the passed
      * values.</p>
      *
-     * @param x                   The x coordinate of this Tile.
-     * @param y                   The y coordinate of this Tile.
-     * @param temperature         The temperature in the Tile.
-     * @param humidity            The humidity in the Tile.
-     * @param pressure            The pressure in the Tile.
-     * @param toxicity            The toxicity of the atmosphere in the Tile.
-     * @param wind                The strength of the wind in the Tile.
-     * @param weather             The type of weather in the Tile.
-     * @param charge              The electric charge in the atmosphere in the
-     *                            Tile.
-     * @param heatGainCoefficient The amount of heat that gets gained each
-     *                            update relative to humidity.
+     * @param x           The x coordinate of this Tile.
+     * @param y           The y coordinate of this Tile.
+     * @param temperature The temperature in the Tile.
+     * @param humidity    The humidity in the Tile.
+     * @param pressure    The pressure in the Tile.
+     * @param toxicity    The toxicity of the atmosphere in the Tile.
+     * @param wind        The strength of the wind in the Tile.
+     * @param weather     The type of weather in the Tile.
+     * @param charge      The electric charge in the atmosphere in the
+     *                    Tile.
      */
     public AtmosphereTile(final int x, final int y, final double temperature,
                           final double humidity,
                           final double pressure, final double toxicity,
                           final double wind, final double charge,
-                          final int weather, final double heatGainCoefficient) {
+                          final int weather) {
         super(x, y);
         this.weather = weather;
         this.temperature = temperature;
-        this.heatChangeCoefficient = heatGainCoefficient;
         setHumidity(humidity);
         setPressure(pressure);
         setToxicity(toxicity);
@@ -116,56 +109,7 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
 
     @Override
     public void objectUpdated(AtmosphereUpdateEvent u) {
-        final TopSoilTile soil = u.world.topSoil.getTile(x, y); //The topsoil
-        //in this tile.
-        double evaporation = Double.max(0, Double.min(1 - humidity, Double.min(
-                soil.getWaterContent(), soil.getWaterContent()
-                * temperature / pressure / 100))); //The amount of water that has
-        //evaporated from the soil into the air.
-        setHumidity(humidity + evaporation);
-        soil.setWaterContent(soil.getWaterContent() - evaporation);
-        temperature += heatChangeCoefficient * humidity;
 
-        //<editor-fold defaultstate="collapsed" desc="Weather Effects">
-        if (weather == AtmosphereConstants.Fair) {
-            heatChangeCoefficient = Double.min(1, heatChangeCoefficient + 0.002);
-        } else if (weather == AtmosphereConstants.Rainy) {
-            double rain = Double.min(1 - humidity,
-                    AtmosphereConstants.RainyHumidityChangeCoefficient * humidity);
-            setHumidity(humidity - rain);
-            if (soil.getWaterContent() + rain > 1) { //That much water can't be
-                //in the soil.
-                rain -= soil.getWaterContent();
-                soil.setWaterContent(1);
-                final GeologyTile crust = u.world.crust.getTile(x, y);
-                crust.setWaterTable(crust.getWaterTable() + rain);
-            }
-            heatChangeCoefficient = Double.max(-1, heatChangeCoefficient - 0.07);
-        } else if (weather == AtmosphereConstants.Hail) {
-            double hail = Double.min(1 - humidity,
-                    AtmosphereConstants.HailHumidityChangeCoefficient * humidity);
-            setHumidity(humidity - hail);
-            if (hail + soil.getWaterContent() > 1) { //That much water can't be
-                //in the soil.
-                hail -= soil.getWaterContent();
-                soil.setWaterContent(1);
-                final GeologyTile crust = u.world.crust.getTile(x, y);
-                crust.setWaterTable(crust.getWaterTable() + hail);
-            }
-        }
-        //</editor-fold>
-
-        //<editor-fold defaultstate="collapsed" desc="Select Weather.">
-        if (100 * humidity * pressure / temperature > 1) { //Water will condence.
-            if (temperature > 5) { //Above freezing temperatures.
-                weather = AtmosphereConstants.Rainy;
-            } else if (Math.abs(temperature) < 5) { //At freezing temperatures.
-                weather = AtmosphereConstants.Hail;
-            }
-        } else { //Water wont condense.
-            weather = AtmosphereConstants.Fair;
-        }
-        //</editor-fold>
     }
 
 }

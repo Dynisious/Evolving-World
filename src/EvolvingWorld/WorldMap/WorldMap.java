@@ -1,16 +1,13 @@
-package EvolvingWorld.WorldMap;
+package evolvingWorld.worldMap;
 
-import EvolvingWorld.AppUtils.Events.GlobalEventListener;
-import EvolvingWorld.AppUtils.Events.UpdateEvent;
-import EvolvingWorld.AppUtils.Events.Updateable;
-import EvolvingWorld.AppUtils.GlobalEvents;
-import EvolvingWorld.AppUtils.Logger;
-import EvolvingWorld.WorldMap.Atmosphere.AtmosphereTileMap;
-import EvolvingWorld.WorldMap.Geology.GeologyTileMap;
-import EvolvingWorld.WorldMap.TopSoil.TopSoilTileMap;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import evolvingWorld.appUtils.events.GlobalEventListener;
+import evolvingWorld.appUtils.events.UpdateEvent;
+import evolvingWorld.appUtils.events.Updateable;
+import evolvingWorld.appUtils.GlobalEvents;
+import evolvingWorld.appUtils.Logger;
+import evolvingWorld.worldMap.atmosphere.AtmosphereTileMap;
+import evolvingWorld.worldMap.geology.GeologyTileMap;
+import evolvingWorld.worldMap.topSoil.TopSoilTileMap;
 import java.util.Timer;
 import java.util.TimerTask;
 /**
@@ -50,38 +47,6 @@ public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
     }
     private double viewX; //The x coordinate of the top leftmost Tile in view.
     private double viewY; //The y coordinate of the top leftmost Tile in view.
-    private double xViewShift = 0; //The shift along the x axis for the view.
-    private double yViewShift = 0; //The shift along the y axis for the view.
-    public final KeyListener keys = new KeyAdapter() {
-
-        private final double shift = 0.1;
-        @Override
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_UP) {
-                yViewShift -= shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                yViewShift += shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                xViewShift += shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                xViewShift -= shift;
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_UP) {
-                yViewShift += shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                yViewShift -= shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                xViewShift -= shift;
-            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                xViewShift += shift;
-            }
-        }
-
-    };
 
     /**
      * <p>
@@ -107,7 +72,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
             @Override
             public void run() {
                 try {
-                    fireUpdateEvent();
+                    fireUpdateEvent(null);
                 } catch (Exception ex) {
                     Logger.instance().logWithStackTrace(
                             "ERROR : There was an error during game execution. "
@@ -121,18 +86,14 @@ public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
     }
 
     @Override
-    protected WorldUpdateEvent getUpdateEvent() {
-        viewX = Double.max(0, Double.min(MapTileConstants.xWorldSize - 1,
-                viewX + xViewShift));
-        viewY = Double.max(0, Double.min(MapTileConstants.yWorldSize - 1,
-                viewY + yViewShift));
+    protected WorldUpdateEvent getUpdateEvent(final UpdateEvent src) {
         return new WorldUpdateEvent(this, (int) viewX, (int) viewY);
     }
 
     @Override
-    public WorldUpdateEvent fireUpdateEvent() {
+    public WorldUpdateEvent fireUpdateEvent(final UpdateEvent src) {
         Logger.instance().write("Game world is updating...", 10, false);
-        final WorldUpdateEvent event = super.fireUpdateEvent();
+        final WorldUpdateEvent event = super.fireUpdateEvent(null);
         Logger.instance().write("Game world has updated", 10, false);
         event.readyForDraw.release(); //This tick is ready to be rendered.
         return event;
@@ -144,13 +105,6 @@ public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
         clearListeners();
         Logger.instance().write("Game world has been stopped successfully.",
                 4, false);
-    }
-
-    @Override
-    protected WorldUpdateEvent getUpdateEvent(UpdateEvent src) {
-        throw new UnsupportedOperationException(
-                "This is not a supported opperation for "
-                + getClass().getSimpleName());
     }
 
 }

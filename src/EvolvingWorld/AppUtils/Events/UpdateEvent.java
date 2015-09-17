@@ -1,4 +1,4 @@
-package EvolvingWorld.AppUtils.Events;
+package evolvingWorld.appUtils.events;
 
 /**
  * <p>

@@ -1,7 +1,7 @@
-package EvolvingWorld.AppUtils;
+package evolvingWorld.appUtils;
 
-import EvolvingWorld.AppUtils.Events.EventObject;
-import EvolvingWorld.AppUtils.Events.GlobalEventListener;
+import evolvingWorld.appUtils.events.EventObject;
+import evolvingWorld.appUtils.events.GlobalEventListener;
 /**
  * <p>
  * This singleton is an EventObject which announces events that affect the
