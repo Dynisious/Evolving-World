@@ -74,25 +74,7 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
         }
         charge = val;
     }
-    private int weather; //The type of weather currently in this Tile.
-    public final int getWeather() {
-        return weather;
-    }
-    /**
-     * <p>
-     * Sets the type of weather in this Atmosphere tile and adjusts the tiles
-     * values to match.
-     *
-     * @param weather The type of weather now in this AtmosphereTile.
-     */
-    public final void setWeather(final int weather) {
-        this.weather = weather;
-        if (weather == AtmosphereConstants.fair) {
-            humidity = 0.1;
-            pressure = Math.random();
-            temperature = 22;
-        }
-    }
+    public int weather; //The type of weather currently in this Tile.
 
     /**
      * <p>
@@ -107,35 +89,22 @@ public class AtmosphereTile extends Tile<AtmosphereUpdateEvent> {
      * @param toxicity    The toxicity of the atmosphere in the Tile.
      * @param wind        The strength of the wind in the Tile.
      * @param weather     The type of weather in the Tile.
-     * @param charge      The electric charge in the atmosphere in the Tile.
+     * @param charge      The electric charge in the atmosphere in the
+     *                    Tile.
      */
     public AtmosphereTile(final int x, final int y, final double temperature,
                           final double humidity,
                           final double pressure, final double toxicity,
-                          final double wind, final int weather,
-                          final double charge) {
+                          final double wind, final double charge,
+                          final int weather) {
         super(x, y);
-        setWeather(weather);
+        this.weather = weather;
         this.temperature = temperature;
         setHumidity(humidity);
         setPressure(pressure);
         setToxicity(toxicity);
         setWind(wind);
         setCharge(charge);
-    }
-
-    /**
-     * <p>
-     * Creates and returns a new instance of AtmosphereTile with the passed
-     * weather.</p>
-     *
-     * @param x       The x coordinate of the Tile.
-     * @param y       The y coordinate of the Tile.
-     * @param weather The type of weather in the Tile.
-     */
-    public AtmosphereTile(final int x, final int y, final int weather) {
-        super(x, y);
-        setWeather(weather);
     }
 
     @Override

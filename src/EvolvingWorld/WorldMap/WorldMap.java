@@ -1,6 +1,7 @@
 package EvolvingWorld.WorldMap;
 
 import EvolvingWorld.AppUtils.Events.GlobalEventListener;
+import EvolvingWorld.AppUtils.Events.UpdateEvent;
 import EvolvingWorld.AppUtils.Events.Updateable;
 import EvolvingWorld.AppUtils.GlobalEvents;
 import EvolvingWorld.AppUtils.Logger;
@@ -17,7 +18,7 @@ import java.util.TimerTask;
  * @author Dynisious 12/09/2015
  * @versions 0.0.1
  */
-public final class WorldMap extends Updateable<WorldUpdateEvent>
+public final class WorldMap extends Updateable<WorldUpdateEvent, UpdateEvent>
         implements GlobalEventListener {
     public final AtmosphereTileMap atmosphere; //The atmosphere of the world.
     public final GeologyTileMap crust; //The world's crust.
@@ -27,7 +28,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
     private final TimerTask task; //The TimerTask executed each update tick.
     public void startTick() {
         if (worldTick == null) {
-            worldTick = new Timer("EW: World Tick", true);
+            worldTick = new Timer("E-W: World Tick", true);
             worldTick.scheduleAtFixedRate(task, 0, tickPeriod);
             Logger.instance().write("Game tick has been started successfully.",
                     7, false);
@@ -44,8 +45,8 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
             }
         }
     }
-    private int viewX; //The x coordinate of the top leftmost Tile in view.
-    private int viewY; //The y coordinate of the top leftmost Tile in view.
+    private double viewX; //The x coordinate of the top leftmost Tile in view.
+    private double viewY; //The y coordinate of the top leftmost Tile in view.
 
     /**
      * <p>
@@ -54,7 +55,8 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
      * @param atmosphere The atmosphere of the world.
      * @param crust      The crust of the world.
      * @param topSoil    The top soil of the world.
-     * @param tickPeriod The number of milliseconds between each game tick.
+     * @param tickPeriod The number of milliseconds between each game
+     *                   tick.
      */
     public WorldMap(final AtmosphereTileMap atmosphere,
                     final GeologyTileMap crust, final TopSoilTileMap topSoil,
@@ -70,7 +72,7 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
             @Override
             public void run() {
                 try {
-                    fireUpdateEvent();
+                    fireUpdateEvent(null);
                 } catch (Exception ex) {
                     Logger.instance().logWithStackTrace(
                             "ERROR : There was an error during game execution. "
@@ -84,14 +86,14 @@ public final class WorldMap extends Updateable<WorldUpdateEvent>
     }
 
     @Override
-    protected WorldUpdateEvent getUpdateEvent() {
-        return new WorldUpdateEvent(this, viewX, viewY);
+    protected WorldUpdateEvent getUpdateEvent(final UpdateEvent src) {
+        return new WorldUpdateEvent(this, (int) viewX, (int) viewY);
     }
 
     @Override
-    public WorldUpdateEvent fireUpdateEvent() {
+    public WorldUpdateEvent fireUpdateEvent(final UpdateEvent src) {
         Logger.instance().write("Game world is updating...", 10, false);
-        final WorldUpdateEvent event = super.fireUpdateEvent();
+        final WorldUpdateEvent event = super.fireUpdateEvent(null);
         Logger.instance().write("Game world has updated", 10, false);
         event.readyForDraw.release(); //This tick is ready to be rendered.
         return event;

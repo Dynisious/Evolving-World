@@ -21,7 +21,8 @@ import java.util.concurrent.Semaphore;
  * @versions 0.0.2
  */
 public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
-                                             GlobalEventListener {
+                                             GlobalEventListener,
+                                             GraphicsListener {
     final Drawer[] drawers; //The Threads which will be rending the frames.
     final Semaphore closedThreads = new Semaphore(0); //This semaphore is used
     //while closing the drawing threads to wait till they have all closed.
@@ -82,6 +83,58 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
         }
     }
 
+    @Override
+    public void renderWorldUpdateEvent(WorldUpdateEvent wue)
+            throws InterruptedException, NullPointerException {
+        wue.readyForDraw.acquire(); //Wait till the frame is
+        //ready to be drawn.
+        final Graphics2D g; //The Graphics2D to draw the games
+        //graphics on.
+        synchronized (strategy) {
+            g = (Graphics2D) strategy.getDrawGraphics();
+        }
+        if (g == null) { //The game screen closed.
+            throw new NullPointerException(
+                    "ERROR : The game screen has closed, draw graphics cannot be aquired.");
+        }
+        final int xDepth; //The number of tiles that fit across
+        //the screen.
+        final int yDepth; //The number of tiles that fit down
+        //the screen.
+                        /*<editor-fold defaultstate="collapsed" desc="Calculate Dimentions">*/ {
+            final DisplayMode dm = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getDefaultScreenDevice().getDisplayMode();
+            xDepth = (int) Math.ceil((double) dm.getWidth()
+                    / MapTileConstants.TileSideLength);
+            yDepth = (int) Math.ceil(((double) dm.getHeight())
+                    / MapTileConstants.TileSideLength);
+            g.translate(-Math.floorMod(dm.getWidth(),
+                    MapTileConstants.TileSideLength) / 2,
+                    -Math.floorMod(dm.getHeight(),
+                            MapTileConstants.TileSideLength) / 2);
+            //Offset the map to evenly display all visible Tiles.
+        } //</editor-fold>
+        for (int i = 0; i < xDepth; i++) {
+            final int x = wue.x + i;
+            for (int j = 0; j < yDepth; j++) {
+                final int y = wue.y + j;
+                g.setColor(new Color(
+                        (float) wue.world.crust.getTile(x,
+                                y).getIntegrity(),
+                        (float) wue.world.topSoil.getTile(x,
+                                y).getFertility(),
+                        (float) wue.world.atmosphere.getTile(
+                                x, y).getHumidity(),
+                        (float) wue.world.atmosphere.getTile(
+                                x, y).getPressure()));
+                g.fillRect(x * MapTileConstants.TileSideLength,
+                        y * MapTileConstants.TileSideLength,
+                        MapTileConstants.TileSideLength,
+                        MapTileConstants.TileSideLength);
+            }
+        }
+    }
+
     private final class Drawer extends Thread implements GlobalEventListener {
         public boolean executing = true; //This boolean keeps the Thread executing.
 
@@ -121,59 +174,17 @@ public final class GraphicsModule implements UpdateListener<WorldUpdateEvent>,
                     Logger.instance().write("Currently drawing frame"
                             + frameID, 10, false);
                     try {
-                        //<editor-fold defaultstate="collapsed" desc="Draw frame">
-                        data.readyForDraw.acquire(); //Wait till the frame is
-                        //ready to be drawn.
-                        final Graphics2D g; //The Graphics2D to draw the games
-                        //graphics on.
-                        synchronized (strategy) {
-                            g = (Graphics2D) strategy.getDrawGraphics();
-                        }
-                        if (g == null) { //The game screen closed.
-                            break;
-                        }
-                        final int xDepth; //The number of tiles that fit across
-                        //the screen.
-                        final int yDepth; //The number of tiles that fit down
-                        //the screen.
-                        /*<editor-fold defaultstate="collapsed" desc="Calculate Dimentions">*/ {
-                            final DisplayMode dm = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                                    .getDefaultScreenDevice().getDisplayMode();
-                            xDepth = (int) Math.ceil((double) dm.getWidth()
-                                    / MapTileConstants.TileSideLength);
-                            yDepth = (int) Math.ceil(((double) dm.getHeight())
-                                    / MapTileConstants.TileSideLength);
-                            g.translate(-Math.floorMod(dm.getWidth(),
-                                    MapTileConstants.TileSideLength) / 2,
-                                    -Math.floorMod(dm.getHeight(),
-                                            MapTileConstants.TileSideLength) / 2);
-                            //Offset the map to evenly display all visible Tiles.
-                        } //</editor-fold>
-                        for (int i = 0; i < xDepth; i++) {
-                            final int x = data.x + i;
-                            for (int j = 0; j < yDepth; j++) {
-                                final int y = data.y + j;
-                                g.setColor(new Color(
-                                        (float) data.world.crust.getTile(x,
-                                                y).getIntegrity(),
-                                        (float) data.world.topSoil.getTile(x,
-                                                y).getFertility(),
-                                        (float) data.world.atmosphere.getTile(
-                                                x, y).getHumidity(),
-                                        (float) data.world.atmosphere.getTile(
-                                                x, y).getPressure()));
-                                g.fillRect(x * MapTileConstants.TileSideLength,
-                                        y * MapTileConstants.TileSideLength,
-                                        MapTileConstants.TileSideLength,
-                                        MapTileConstants.TileSideLength);
-                            }
-                        }
-                        //</editor-fold>
+                        renderWorldUpdateEvent(data);
 
                         synchronized (strategy) {
-                            Logger.instance().write("Currently rendering frame"
-                                    + frameID, 10, false);
-                            strategy.show(); //Display the graphics.
+                            if (lastFrameId < frameID) { //This is a more recent
+                                //frame and should be rendered.
+                                lastFrameId = frameID;
+                                Logger.instance().write(
+                                        "Currently rendering frame"
+                                        + frameID, 10, false);
+                                strategy.show(); //Display the graphics.
+                            }
                         }
                     } catch (InterruptedException ex) {
                         if (executing) {

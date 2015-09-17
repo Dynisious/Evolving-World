@@ -11,7 +11,7 @@ import EvolvingWorld.WorldMap.WorldUpdateEvent;
  * @author Dynisious 11/09/2015
  * @versions 0.0.1
  */
-public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent>
+public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent, WorldUpdateEvent>
         implements UpdateListener<WorldUpdateEvent> {
 
     /**
@@ -26,19 +26,19 @@ public class TopSoilTileMap extends TileMap<TopSoilTile, TopSoilUpdateEvent>
     }
 
     @Override
-    protected TopSoilUpdateEvent getUpdateEvent() {
-        return new TopSoilUpdateEvent(this);
-    }
-
-    @Override
     public void objectUpdated(final WorldUpdateEvent u) {
         Logger.instance().write("Updating world top soil...", 10, false);
-        fireUpdateEvent();
+        fireUpdateEvent(u);
     }
 
     @Override
     public void applicationClosing(int reason) {
         clearListeners();
+    }
+
+    @Override
+    protected TopSoilUpdateEvent getUpdateEvent(final WorldUpdateEvent src) {
+        return new TopSoilUpdateEvent(src);
     }
 
 }

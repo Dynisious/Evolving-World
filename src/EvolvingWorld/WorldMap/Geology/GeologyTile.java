@@ -14,14 +14,15 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
     //mined in this GeologyTile.
     final public int[] gemstones; //The different gemstones which can be found and
     //mined in this GeologyTile.
-    private int waterTable; //The amount of water to be found in this tile.
-    public final int getWaterTable() {
+    private double waterTable; //The amount of water to be found in this tile.
+    public final double getWaterTable() {
         return waterTable;
     }
-    public final void setWaterTable(final int val) {
-        if (val < 0) {
+    public final void setWaterTable(final double val) {
+        if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
-                    "ERROR : val must be greater than or equal to 0. val=" + val);
+                    "ERROR : val must be between 0 and 1. val="
+                    + String.format("-10.2", val));
         }
         waterTable = val;
     }
@@ -29,7 +30,8 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
     public final double getIntegrity() {
         return integrity;
     }
-    public final void setIntegrity(final double val) throws IllegalArgumentException {
+    public final void setIntegrity(final double val) throws
+            IllegalArgumentException {
         if (val < 0 || val > 1) {
             throw new IllegalArgumentException(
                     "Integrity can only be between 0 and 1. value="
@@ -50,17 +52,16 @@ public class GeologyTile extends Tile<GeologyUpdateEvent> {
      * @param gemstones  The quantity of different gemstones in this
      *                   GeologyTile.
      * @param waterTable The amount of water to be found in the GeologyTile.
-     * @param integrity  The integrity of this GeologyTile.
      */
     public GeologyTile(final int x, final int y, final int[] minerals,
-                       final int[] gemstones, final int waterTable,
-                       final double integrity) {
+                       final int[] gemstones, final double waterTable) {
         super(x, y);
         this.minerals = minerals;
         this.gemstones = gemstones;
         setWaterTable(waterTable);
         setIntegrity(integrity);
     }
+
     @Override
     public void objectUpdated(GeologyUpdateEvent u) {
 
